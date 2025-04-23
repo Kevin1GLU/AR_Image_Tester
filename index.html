@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple AR</title>
+    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+  </head>
+  <body>
+    <script
+      src="https://cdn.jsdelivr.net/gh/akbartus/Simple-AR/dist/0.1.2/simple-ar.min.js"
+      onload="onWasmLoaded();"
+    ></script>
+    <a-scene>
+        <a-entity simple-ar="src: img/target.jpg; minCutOffValue: 1; betaValue:0.1;">
+            <a-gltf-model
+              src="model3.glb"
+              position="0 0 0"
+              rotation="0 0 0"
+              scale="1 1 1"
+            ></a-gltf-model>
+          </a-entity>
+      <a-camera position="0 0 0"></a-camera>
+    </a-scene>
+  </body>
+</html>
