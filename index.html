@@ -64,7 +64,7 @@
 
       <a-assets>
         <a-asset-item id="animated-asset" src="model.glb"></a-asset-item>
-        <video position="0 0.1 0.1" id="webm-video" src="blue_shockwave.webm" autoplay loop muted playsinline visible="false"></video>
+        <video position="0 0.1 0.1" id="webm-video" src="blue_shockwave.webm" autoplay loop muted playsinline visible="true"></video>
     </a-assets>
 
       <a-marker
@@ -111,11 +111,6 @@
         document.body.style.height = '100%';
         document.documentElement.style.position = 'fixed';
       });
-
-      window.setTimeout(function() {
-        const webmPlane = document.getElementById('webm-video');
-        webmPlane.setAttribute('visible', true); // Make it visible after 4 seconds
-      }, 4000); // 4000 milliseconds = 4 seconds
     </script>
   </body>
 </html>
