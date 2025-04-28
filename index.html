@@ -24,13 +24,8 @@
                     document.querySelector('#video-plane').setAttribute('visible', true);
 
                     // Reset video and play it from the beginning
-                    vid.currentTime = 0;
+                    vid.currentTime = 0;                    
                     vid.play();
-
-                    // When the video ends, hide the video plane
-                    vid.addEventListener('ended', function() {
-                        document.querySelector('#video-plane').setAttribute('visible', false);
-                    });
                 });
             }
         });
