@@ -1,108 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover" />
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>AR.js Video on Marker</title>
-
-    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <title>AR Video Demo</title>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
-
-    <style>
-      body {
-        margin: 0;
-        overflow: hidden;
-      }
-
-      .arjs-loader {
-        height: 100%;
-        width: 100%;
-        position: absolute;
-        top: 0;
-        left: 0;
-        background-color: rgba(0, 0, 0, 0.8);
-        z-index: 9999;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      .arjs-loader div {
-        text-align: center;
-        font-size: 1.25em;
-        color: white;
-      }
-
-      /* Debugging: Show if video is loading */
-      #debug-video {
-        position: absolute;
-        top: 10px;
-        left: 10px;
-        color: white;
-        font-size: 20px;
-        background-color: rgba(0, 0, 0, 0.5);
-        padding: 5px;
-      }
-    </style>
-  </head>
-
-  <body>
-    <!-- Loading screen -->
-    <div class="arjs-loader">
-      <div>Loading, please wait...</div>
-    </div>
-
-    <!-- Debug video loading status -->
-    <div id="debug-video">Video Loading...</div>
-
-    <a-scene
-      vr-mode-ui="enabled: false"
-      loading-screen="enabled: false"
-      renderer="logarithmicDepthBuffer: true; antialias: true; precision: mediump;"
-      arjs="trackingMethod: best; sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
-      embedded
-    >
-      <a-assets>
-        <!-- Load the video asset -->
-        <video id="webm-video" src="blue_shockwave.webm" autoplay loop muted playsinline></video>
-      </a-assets>
-
-      <a-marker type="pattern" preset="custom" url="markerr.patt">
-        <!-- Create the plane and display the video -->
-        <a-entity
-          geometry="primitive: plane; width: 3; height: 3"
-          material="src: #webm-video; transparent: true; opacity: 1"
-          position="0 0 0"
-          rotation="0 0 0"
-        ></a-entity>
-      </a-marker>
-
-      <a-entity camera></a-entity>
-      <a-light type="directional" intensity="3" position="2 4 4"></a-light>
-      <a-light type="ambient" intensity="0.5" color="#BBB"></a-light>
-    </a-scene>
-
     <script>
-      // Remove loader when scene is ready
-      const scene = document.querySelector('a-scene');
-      const loader = document.querySelector('.arjs-loader');
-      const debugVideo = document.getElementById('debug-video');
+        // Register a custom event listener to start video playback when the marker is found
+        AFRAME.registerComponent('registerevents', {
+            init: function() {
+                var marker = this.el;
 
-      // Check if video is loaded
-      const videoElement = document.getElementById('webm-video');
-      videoElement.addEventListener('canplay', function () {
-        debugVideo.textContent = "Video Loaded!";
-      });
+                // Emit events when marker is found and lost
+                marker.setAttribute('emitevents', 'true');
 
-      videoElement.addEventListener('error', function () {
-        debugVideo.textContent = "Error loading video!";
-      });
+                marker.addEventListener('markerFound', function() {
+                    // Get the video element
+                    var vid = document.getElementById('webm-video');
 
-      scene.addEventListener('loaded', function () {
-        loader.style.display = 'none';
-      });
+                    // Make sure the video is visible
+                    document.querySelector('#video-plane').setAttribute('visible', true);
+
+                    // Reset video and play it from the beginning
+                    vid.currentTime = 0;
+                    vid.play();
+
+                    // When the video ends, hide the video plane
+                    vid.addEventListener('ended', function() {
+                        document.querySelector('#video-plane').setAttribute('visible', false);
+                    });
+                });
+            }
+        });
     </script>
-  </body>
+</head>
+<body style="margin:0; overflow:hidden;">
+    <a-scene embedded arjs>
+        <!-- Load assets: Image and Video -->
+        <a-assets timeout="10000">
+            <video id="webm-video" src="blue_shockwave.webm" loop="false" autoplay="false" preload="auto"></video>
+        </a-assets>
+
+        <!-- Marker to detect -->
+        <a-marker preset="hiro" registerevents>
+            <!-- Video plane that will appear when the marker is detected -->
+            <a-plane id="video-plane" src="#webm-video" height="2" width="3" position="0 0 0" visible="false"></a-plane>
+        </a-marker>
+
+        <!-- Camera -->
+        <a-entity camera></a-entity>
+    </a-scene>
+</body>
 </html>
