@@ -3,50 +3,6 @@
   <head>
     <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
     <script src="https://cdn.rawgit.com/AR-js-org/AR.js/3.4.2/aframe/build/aframe-ar.min.js"></script>
-    <script>
-      // Register the chroma key component
-      AFRAME.registerComponent('chroma-key', {
-        schema: {
-          color: {default: '0.0 0.0 0.0'} // RGB for black
-        },
-        init: function () {
-          const el = this.el;
-          const video = el.getObject3D('mesh').material.map.image;
-
-          const shader = new THREE.ShaderMaterial({
-            uniforms: {
-              colorToReplace: { value: new THREE.Color(...this.data.color.split(' ').map(Number)) },
-              texture: { value: el.getObject3D('mesh').material.map }
-            },
-            vertexShader: `
-              varying vec2 vUv;
-              void main() {
-                vUv = uv;
-                gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
-              }
-            `,
-            fragmentShader: `
-              uniform sampler2D texture;
-              uniform vec3 colorToReplace;
-              varying vec2 vUv;
-
-              void main() {
-                vec4 color = texture2D(texture, vUv);
-                float threshold = 0.2;
-                float diff = distance(color.rgb, colorToReplace);
-                if (diff < threshold) {
-                  discard;
-                }
-                gl_FragColor = color;
-              }
-            `,
-            transparent: true
-          });
-
-          el.getObject3D('mesh').material = shader;
-        }
-      });
-    </script>
   </head>
   <body style="margin: 0; overflow: hidden">
     <a-scene
@@ -56,14 +12,14 @@
       <!-- Marker -->
       <a-marker type="pattern" url="markerr.patt">
 
-        <!-- Video asset -->
+        <!-- Video asset with additive blending -->
         <a-video 
           src="#video" 
           width="2" 
           height="1.2" 
           position="0 0 0"
           rotation="-90 0 0"
-          chroma-key="color: 0.0 0.0 0.0">
+          material="shader: flat; transparent: true; opacity: 0.7; blendSrc: add; blendDst: add;">
         </a-video>
 
       </a-marker>
