@@ -14,7 +14,7 @@
           src="#video1" 
           width="1" 
           height="1" 
-          position="0 0 0"
+          position="1 0 0"
           rotation="-90 0 0"
           material="shader: flat; transparent: true; opacity: 1;">
         </a-video>
@@ -24,7 +24,7 @@
           src="#video2" 
           width="1" 
           height="1" 
-          position="0 0 0.01"
+          position="-1 0 0.01"
           rotation="-90 0 0"
           material="shader: flat; transparent: true; opacity: 1;">
         </a-video>
@@ -35,11 +35,11 @@
 
       <!-- Hidden video elements -->
       <video id="video1" autoplay loop muted playsinline webkit-playsinline style="display: none">
-        <source src="3d-transparent.webm" type="video/webm" />
+        <source src="clip1.webm" type="video/webm" />
       </video>
 
       <video id="video2" autoplay loop muted playsinline webkit-playsinline style="display: none">
-        <source src="clip3.webm" type="video/webm" />
+        <source src="clip2.webm" type="video/webm" />
       </video>
     </a-scene>
 
@@ -54,12 +54,12 @@
         // Delay video1 by 1 seconds
         playTimeout1 = setTimeout(() => {
           video1.play();
-        }, 1000);
+        }, 0);
 
         // Delay video2 by 5 seconds
         playTimeout2 = setTimeout(() => {
           video2.play();
-        }, 5000);
+        }, 0);
       });
 
       marker.addEventListener("markerLost", () => {
