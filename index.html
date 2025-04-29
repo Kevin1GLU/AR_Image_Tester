@@ -3,50 +3,6 @@
   <head>
     <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
     <script src="https://cdn.rawgit.com/AR-js-org/AR.js/3.4.2/aframe/build/aframe-ar.min.js"></script>
-
-    <script>
-        AFRAME.registerComponent('remove-black-background', {
-          schema: {
-            threshold: { default: 0.1 }
-          },
-          init: function () {
-            const el = this.el;
-            const video = el.getObject3D('mesh').material.map.image;
-      
-            const shader = new THREE.ShaderMaterial({
-              uniforms: {
-                texture: { value: el.getObject3D('mesh').material.map },
-                threshold: { value: this.data.threshold }
-              },
-              vertexShader: `
-                varying vec2 vUv;
-                void main() {
-                  vUv = uv;
-                  gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
-                }
-              `,
-              fragmentShader: `
-                uniform sampler2D texture;
-                uniform float threshold;
-                varying vec2 vUv;
-      
-                void main() {
-                  vec4 color = texture2D(texture, vUv);
-                  float brightness = (color.r + color.g + color.b) / 3.0;
-                  if (brightness < threshold) {
-                    discard; // Discard black pixels
-                  }
-                  gl_FragColor = color;
-                }
-              `,
-              transparent: true
-            });
-      
-            el.getObject3D('mesh').material = shader;
-          }
-        });
-      </script>
-      
   </head>
   <body style="margin: 0; overflow: hidden">
     <a-scene
@@ -55,26 +11,22 @@
     >
       <!-- Marker -->
       <a-marker type="pattern" url="markerr.patt">
-
-        <!-- Video asset with additive blending -->
         <a-video 
           src="#video" 
           width="2" 
           height="1.2" 
           position="0 0 0"
           rotation="-90 0 0"
-          material="shader: flat; transparent: true; opacity: 1; blendSrc: screen; blendDst: screen;"
-          remove-black-background="threshold: 0.1">
+          material="shader: flat; transparent: true; opacity: 1;">
         </a-video>
-
       </a-marker>
 
       <!-- Camera -->
       <a-entity camera></a-entity>
 
-      <!-- Hidden video element -->
+      <!-- Hidden video element (WebM with alpha channel) -->
       <video id="video" autoplay loop muted playsinline webkit-playsinline style="display: none">
-        <source src="clip3.mp4" type="video/mp4" />
+        <source src="clip3.webm" type="video/webm" />
       </video>
     </a-scene>
 
