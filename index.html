@@ -12,9 +12,10 @@
         <!-- Video 1 -->
         <a-video 
           src="#video1" 
+          id="videoPlane1"
           width="1.5" 
           height="0.818" 
-          position="0.6 0 0.5"
+          position="0.8 0 0.5"
           rotation="-90 0 0"
           material="shader: flat; transparent: true; opacity: 1;">
         </a-video>
@@ -24,7 +25,7 @@
           src="#video2" 
           width="1.5" 
           height="0.818" 
-          position="0.6 0 -0.5"
+          position="0.8 0 -0.5"
           rotation="-90 0 0"
           material="shader: flat; transparent: true; opacity: 1;">
         </a-video>
@@ -33,7 +34,7 @@
           src="#video1" 
           width="1.5" 
           height="0.818" 
-          position="-0.6 0 0.5"
+          position="-0.8 0 0.5"
           rotation="-90 0 0"
           material="shader: flat; transparent: true; opacity: 1;">
         </a-video>
@@ -43,7 +44,7 @@
           src="#video2" 
           width="1.5" 
           height="0.818" 
-          position="-0.6 0 -0.5"
+          position="-0.8 0 -0.5"
           rotation="-90 0 0"
           material="shader: flat; transparent: true; opacity: 1;">
         </a-video>
@@ -73,13 +74,13 @@
         // Delay video1 by 1 seconds
         playTimeout1 = setTimeout(() => {
           video1.play();
-          videoPlane1.setAttribute("material", "opacity", "0.5");
+          document.querySelector("#videoPlane1").setAttribute("material", "opacity", "0.5");
         }, 5000);
 
         // Delay video2 by 5 seconds
         playTimeout2 = setTimeout(() => {
           video2.play();
-          videoPlane2.setAttribute("material", "opacity", "0.5");
+          document.querySelector("#videoPlane2").setAttribute("material", "opacity", "0.5");
         }, 2000);
       });
 
