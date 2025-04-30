@@ -16,7 +16,7 @@
           height="0.818" 
           position="1 0 0.3"
           rotation="-90 0 0"
-          material="shader: flat; transparent: true; opacity: 1;">
+          material="shader: flat; transparent: true; opacity: 0;">
         </a-video>
 
         <!-- Video 2 -->
@@ -26,7 +26,7 @@
           height="0.818" 
           position="1 0 -0.3"
           rotation="-90 0 0"
-          material="shader: flat; transparent: true; opacity: 1;">
+          material="shader: flat; transparent: true; opacity: 0;">
         </a-video>
 
         <a-video 
@@ -35,7 +35,7 @@
           height="0.818" 
           position="-1 0 0.3"
           rotation="-90 0 0"
-          material="shader: flat; transparent: true; opacity: 1;">
+          material="shader: flat; transparent: true; opacity: 0;">
         </a-video>
 
         <!-- Video 2 -->
@@ -45,7 +45,7 @@
           height="0.818" 
           position="-1 0 -0.3"
           rotation="-90 0 0"
-          material="shader: flat; transparent: true; opacity: 1;">
+          material="shader: flat; transparent: true; opacity: 0;">
         </a-video>
       </a-marker>
 
@@ -79,6 +79,15 @@
         playTimeout2 = setTimeout(() => {
           video2.play();
         }, 2000);
+      });
+
+      // When videos can play, show them
+      video1.addEventListener("canplaythrough", () => {
+      videoPlane1.setAttribute("material", "opacity", "1");
+      });
+
+        video2.addEventListener("canplaythrough", () => {
+        videoPlane2.setAttribute("material", "opacity", "1");
       });
 
       marker.addEventListener("markerLost", () => {
