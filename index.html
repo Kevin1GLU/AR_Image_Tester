@@ -30,16 +30,6 @@
           rotation="-90 0 0"
           material="shader: flat; transparent: true; opacity: 0;">
         </a-video>
-
-        <a-video 
-          src="#video1"
-          id="videoPlane3"
-          width="1.5" 
-          height="0.818" 
-          position="-0.8 0 0.5"
-          rotation="-90 0 0"
-          material="shader: flat; transparent: true; opacity: 0;">
-        </a-video>
       </a-marker>
 
       <!-- Camera -->
@@ -61,24 +51,42 @@
       const marker = document.querySelector("a-marker");
 
       let playTimeout1, playTimeout2;
+      let stopTimeout1, stopTimeout2;
 
       marker.addEventListener("markerFound", () => {
-        // Delay video1 by 5 seconds
-        playTimeout1 = setTimeout(() => {
-          video1.play();
-          document.querySelector("#videoPlane1").setAttribute("material", "opacity", "1");
-        }, 5000);
+    // Delay video1 by 5 seconds
+    playTimeout1 = setTimeout(() => {
+      video1.play();
+      document.querySelector("#videoPlane1").setAttribute("material", "opacity", "1");
 
-        // Delay video2 by 2 seconds
-        playTimeout2 = setTimeout(() => {
-          video2.play();
-          document.querySelector("#videoPlane2").setAttribute("material", "opacity", "1");
-        }, 2000);
-      });
+      // Stop video1 after 8 seconds of playing
+      stopTimeout1 = setTimeout(() => {
+        video1.pause();
+        document.querySelector("#videoPlane1").setAttribute("material", "opacity", "0");
+        video1.currentTime = 0;
+      }, 8000);
+    }, 5000);
+
+    // Delay video2 by 2 seconds
+    playTimeout2 = setTimeout(() => {
+      video2.play();
+      document.querySelector("#videoPlane2").setAttribute("material", "opacity", "1");
+
+      // Stop video2 after 8 seconds of playing
+      stopTimeout2 = setTimeout(() => {
+        video2.pause();
+        document.querySelector("#videoPlane2").setAttribute("material", "opacity", "0");
+        video2.currentTime = 0;
+      }, 8000);
+    }, 2000);
+  });
 
       marker.addEventListener("markerLost", () => {
         clearTimeout(playTimeout1);
         clearTimeout(playTimeout2);
+        clearTimeout(stopTimeout1);
+        clearTimeout(stopTimeout2);
+
         video1.pause();
         video2.pause();
         video1.currentTime = 0;
