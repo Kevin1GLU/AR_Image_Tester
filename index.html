@@ -67,20 +67,20 @@
     </a-scene>
 
     <script>
-      const video1 = document.querySelector("#VideoPlane1");
-      const video2 = document.querySelector("#VideoPlane2");
+      const video1 = document.querySelector("#video1");
+      const video2 = document.querySelector("#video2");
       const marker = document.querySelector("a-marker");
 
       let playTimeout1, playTimeout2;
 
       marker.addEventListener("markerFound", () => {
-        // Delay video1 by 1 seconds
+        // Delay video1 by 5 seconds
         playTimeout1 = setTimeout(() => {
           video1.play();
           document.querySelector("#videoPlane1").setAttribute("material", "opacity", "1");
         }, 5000);
 
-        // Delay video2 by 5 seconds
+        // Delay video2 by 2 seconds
         playTimeout2 = setTimeout(() => {
           video2.play();
           document.querySelector("#videoPlane2").setAttribute("material", "opacity", "1");
