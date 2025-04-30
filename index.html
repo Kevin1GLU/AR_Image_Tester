@@ -68,7 +68,7 @@
 
     <script>
       const video1 = document.querySelector("#VideoPlane1");
-      const video2 = document.querySelector("#video2");
+      const video2 = document.querySelector("#VideoPlane2");
       const marker = document.querySelector("a-marker");
 
       let playTimeout1, playTimeout2;
@@ -90,6 +90,8 @@
       marker.addEventListener("markerLost", () => {
         clearTimeout(playTimeout1);
         clearTimeout(playTimeout2);
+        document.querySelector("#videoPlane2").setAttribute("material", "opacity", "0");
+        document.querySelector("#videoPlane1").setAttribute("material", "opacity", "0");
         video1.pause();
         video2.pause();
         video1.currentTime = 0;
