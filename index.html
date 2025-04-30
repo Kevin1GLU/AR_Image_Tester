@@ -14,7 +14,7 @@
           src="#video1" 
           width="1.5" 
           height="0.818" 
-          position="1 0 0.3"
+          position="0.6 0 0.5"
           rotation="-90 0 0"
           material="shader: flat; transparent: true; opacity: 0;">
         </a-video>
@@ -24,7 +24,7 @@
           src="#video2" 
           width="1.5" 
           height="0.818" 
-          position="1 0 -0.3"
+          position="0.6 0 -0.5"
           rotation="-90 0 0"
           material="shader: flat; transparent: true; opacity: 0;">
         </a-video>
@@ -33,7 +33,7 @@
           src="#video1" 
           width="1.5" 
           height="0.818" 
-          position="-1 0 0.3"
+          position="-0.6 0 0.5"
           rotation="-90 0 0"
           material="shader: flat; transparent: true; opacity: 0;">
         </a-video>
@@ -43,7 +43,7 @@
           src="#video2" 
           width="1.5" 
           height="0.818" 
-          position="-1 0 -0.3"
+          position="-0.6 0 -0.5"
           rotation="-90 0 0"
           material="shader: flat; transparent: true; opacity: 0;">
         </a-video>
@@ -82,11 +82,11 @@
       });
 
       // When videos can play, show them
-      video1.addEventListener("canplaythrough", () => {
+      video1.addEventListener("playTimeout1", () => {
       videoPlane1.setAttribute("material", "opacity", "1");
       });
 
-        video2.addEventListener("canplaythrough", () => {
+        video2.addEventListener("playTimeout2", () => {
         videoPlane2.setAttribute("material", "opacity", "1");
       });
 
