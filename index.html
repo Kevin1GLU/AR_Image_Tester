@@ -35,12 +35,9 @@
           rotation="-90 0 0"
           material="shader: flat; transparent: true; opacity: 0;">
         </a-video>
-      </a-marker>
-
-      <!-- Camera -->
-      <a-entity camera></a-entity>
-
-      <a-entity
+        
+        <!-- Model -->
+        <a-entity
           scale="3 3 3"
           animation-mixer="loop: repeat"
           gltf-model="#animated-asset"
@@ -49,6 +46,11 @@
           position="0 0 0"
           rotation="0 0 0"
         ></a-entity>
+
+      </a-marker>
+
+      <!-- Camera -->
+      <a-entity camera></a-entity>
 
       <!-- Hidden video elements -->
       <video id="video1" autoplay loop muted playsinline webkit-playsinline style="display: none">
