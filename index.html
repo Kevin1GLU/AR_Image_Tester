@@ -25,21 +25,32 @@
 
     <a-scene
       embedded
-      arjs="sourceType: webcam; debugUIEnabled: false;"
       vr-mode-ui="enabled: false"
       renderer="antialias: true; alpha: true"
-      onloaded="document.getElementById('loader').style.display='none'">
-
+      arjs="sourceType: webcam; debugUIEnabled: false;"
+    >
       <!-- Custom marker -->
       <a-marker type="pattern" url="markerr.patt">
         <a-entity
           gltf-model="model3.glb"
-          scale="3 3 3"
-          position="0 0 0"
+          scale="5 5 5"
+          position="50 150 0"
         ></a-entity>
       </a-marker>
 
       <a-entity camera></a-entity>
     </a-scene>
+
+    <script>
+      // Wait until the camera is active
+      document.querySelector('a-scene').addEventListener('loaded', () => {
+        const arSystem = document.querySelector('a-scene').systems["arjs"];
+        if (arSystem && arSystem.arToolkitSource && arSystem.arToolkitSource.domElement) {
+          arSystem.arToolkitSource.domElement.addEventListener("canplay", () => {
+            document.getElementById('loader').style.display = 'none';
+          });
+        }
+      });
+    </script>
   </body>
 </html>
