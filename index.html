@@ -1,117 +1,54 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
-    <script src="https://cdn.rawgit.com/AR-js-org/AR.js/3.4.2/aframe/build/aframe-ar.min.js"></script>
-  </head>
-  <body style="margin: 0; overflow: hidden">
-    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
+<script src="https://cdn.jsdelivr.net/gh/aframevr/aframe@1c2407b26c61958baa93967b5412487cd94b290b/dist/aframe-master.min.js"></script>
+<script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
 
-      <a-assets>
-        <a-asset-item id="animated-asset" src="model.glb"></a-asset-item>
-    </a-assets>
+<style>
+  .arjs-loader {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
-      <!-- Marker -->
-      <a-marker type="pattern" url="markerr.patt">
+  .arjs-loader div {
+    text-align: center;
+    font-size: 1.25em;
+    color: white;
+  }
+</style>
 
-        <!-- Video 1 -->
-        <a-video 
-          src="#video1" 
-          id="videoPlane1"
-          width="1.5" 
-          height="0.818" 
-          position="0.8 0 0.5"
-          rotation="-90 0 0"
-          material="shader: flat; transparent: true; opacity: 0;">
-        </a-video>
+<body style="margin : 0px; overflow: hidden;">
+  <!-- minimal loader shown until image descriptors are loaded -->
+  <div class="arjs-loader">
+    <div>Loading, please wait...</div>
+  </div>
+  <a-scene
+    vr-mode-ui="enabled: false;"
+    renderer="logarithmicDepthBuffer: true;"
+    embedded
+    arjs="trackingMethod: best; sourceType: webcam;debugUIEnabled: false;"
+  >
 
-        <!-- Video 2 -->
-        <a-video 
-          src="#video2"
-          id="videoPlane2"
-          width="1.5" 
-          height="0.818" 
-          position="0.8 0 -0.5"
-          rotation="-90 0 0"
-          material="shader: flat; transparent: true; opacity: 0;">
-        </a-video>
-
-        <!-- Model -->
-        <a-entity
-          scale="3 3 3"
-          animation-mixer="loop: repeat"
-          gltf-model="#animated-asset"
-          class="clickable"
-          gesture-handler
-          position="0 0 0"
-          rotation="0 0 0"
-        ></a-entity>
-
-      </a-marker>
-
-      <!-- Camera -->
-      <a-entity camera></a-entity>
-
-      <!-- Hidden video elements -->
-      <video id="video1" autoplay loop muted playsinline webkit-playsinline style="display: none">
-        <source src="Comp 1.webm" type="video/webm" />
-      </video>
-
-      <video id="video2" autoplay loop muted playsinline webkit-playsinline style="display: none">
-        <source src="Comp 2.webm" type="video/webm" />
-      </video>
-    </a-scene>
-
-    <script>
-      const video1 = document.querySelector("#video1");
-      const video2 = document.querySelector("#video2");
-      const marker = document.querySelector("a-marker");
-
-      let playTimeout1, playTimeout2;
-      let stopTimeout1, stopTimeout2;
-
-      marker.addEventListener("markerFound", () => {
-    // Delay video1 by 5 seconds
-    playTimeout1 = setTimeout(() => {
-      video1.play();
-      document.querySelector("#videoPlane1").setAttribute("material", "opacity", "1");
-
-      // Stop video1 after 8 seconds of playing
-      stopTimeout1 = setTimeout(() => {
-        video1.pause();
-        document.querySelector("#videoPlane1").setAttribute("material", "opacity", "0");
-        video1.currentTime = 0;
-      }, 8000);
-    }, 0);
-
-    // Delay video2 by 2 seconds
-    playTimeout2 = setTimeout(() => {
-      video2.play();
-      document.querySelector("#videoPlane2").setAttribute("material", "opacity", "1");
-
-      // Stop video2 after 8 seconds of playing
-      stopTimeout2 = setTimeout(() => {
-        video2.pause();
-        document.querySelector("#videoPlane2").setAttribute("material", "opacity", "0");
-        video2.currentTime = 0;
-      }, 8000);
-    }, 0);
-  });
-
-      marker.addEventListener("markerLost", () => {
-        clearTimeout(playTimeout1);
-        clearTimeout(playTimeout2);
-        clearTimeout(stopTimeout1);
-        clearTimeout(stopTimeout2);
-
-        document.querySelector("#videoPlane1").setAttribute("material", "opacity", "0");
-        document.querySelector("#videoPlane2").setAttribute("material", "opacity", "0");
-
-        video1.pause();
-        video2.pause();
-        video1.currentTime = 0;
-        video2.currentTime = 0;
-      });
-    </script>
-  </body>
-</html>
+    <a-nft
+      type="nft"
+      url="image/target"
+      smooth="true"
+      smoothCount="10"
+      smoothTolerance=".01"
+      smoothThreshold="5"
+    >
+      <a-entity
+        gltf-model="model3.glb"
+        scale="5 5 5"
+        position="50 150 0"
+      >
+      </a-entity>
+    </a-nft>
+    <a-entity camera></a-entity>
+  </a-scene>
+</body>
