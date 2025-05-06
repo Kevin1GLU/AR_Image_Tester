@@ -91,12 +91,19 @@
 
     <!-- JS to animate overlay -->
     <script>
-      document.getElementById('okButton').addEventListener('click', function () {
-        const overlay = document.getElementById('overlay');
-        overlay.classList.add('fade-out');
+      const overlay = document.getElementById('overlay');
+      const button = document.getElementById('okButton');
+    
+      button.addEventListener('click', () => {
+        // Let the browser apply the style before adding the class
+        requestAnimationFrame(() => {
+          overlay.classList.add('fade-out');
+        });
+    
+        // Hide overlay after animation completes
         setTimeout(() => {
           overlay.style.display = 'none';
-        }, 600); // Matches CSS transition duration
+        }, 600); // match the CSS transition duration
       });
     </script>
   </body>
