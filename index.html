@@ -26,6 +26,15 @@
         z-index: 10;
         text-align: center;
         padding: 20px;
+
+        /* Animation setup */
+        transition: opacity 0.6s ease, transform 0.6s ease;
+      }
+
+      #overlay.fade-out {
+        opacity: 0;
+        transform: translateY(-50px);
+        pointer-events: none;
       }
 
       #overlay h1 {
@@ -71,19 +80,23 @@
         </a-entity>
       </a-marker>
 
-      <a-entity camera></a-entity>
+      <a-entity camera="near: 0.1; far: 50"></a-entity>
     </a-scene>
 
     <!-- UI Overlay -->
     <div id="overlay">
-      <h1>Scan het patroon.  </h1>
-      <button id="okButton">  OK  </button>
+      <h1>Scan het patroon.</h1>
+      <button id="okButton">OK</button>
     </div>
 
-    <!-- JS to hide overlay on button click -->
+    <!-- JS to animate overlay -->
     <script>
       document.getElementById('okButton').addEventListener('click', function () {
-        document.getElementById('overlay').style.display = 'none';
+        const overlay = document.getElementById('overlay');
+        overlay.classList.add('fade-out');
+        setTimeout(() => {
+          overlay.style.display = 'none';
+        }, 600); // Matches CSS transition duration
       });
     </script>
   </body>
