@@ -1,21 +1,86 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
     <script src="https://cdn.rawgit.com/AR-js-org/AR.js/3.4.2/aframe/build/aframe-ar.min.js"></script>
-    <!-- Add aframe-extras for animation-mixer component -->
     <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js"></script>
+    <style>
+      /* Welcome screen styles */
+      #welcomeScreen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #000000;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        color: white;
+        font-family: Arial, sans-serif;
+      }
+      
+      #welcomeMessage {
+        font-size: 24px;
+        margin-bottom: 30px;
+        text-align: center;
+        padding: 0 20px;
+      }
+      
+      #startButton {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 18px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      
+      /* Small debug panel that can be toggled */
+      #debugInfo {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        background-color: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 5px;
+        font-size: 12px;
+        z-index: 999;
+        max-width: 80%;
+        overflow: hidden;
+        display: none; /* Initially hidden */
+      }
+    </style>
   </head>
   <body style="margin: 0; overflow: hidden">
-    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
+    <!-- Welcome Screen -->
+    <div id="welcomeScreen">
+      <div id="welcomeMessage">Scan de Foto!</div>
+      <button id="startButton">OK</button>
+    </div>
+    
+    <!-- Debug info panel - only shown when needed -->
+    <div id="debugInfo"></div>
+    
+    <!-- AR Scene - initially hidden -->
+    <a-scene id="arScene" embedded arjs="sourceType: webcam; debugUIEnabled: false;" vr-mode-ui="enabled: false" renderer="logarithmicDepthBuffer: true;" visible="false">
       
       <a-assets>
         <a-asset-item id="animated-asset" src="model4.glb"></a-asset-item>
-        <!-- Move videos inside a-assets -->
-        <video id="video1" autoplay loop muted playsinline webkit-playsinline style="display: none" crossorigin="anonymous">
+        
+        <!-- WebM videos for transparency -->
+        <video id="video1" autoplay loop muted playsinline webkit-playsinline crossorigin="anonymous">
           <source src="Comp1.webm" type="video/webm" />
         </video>
-        <video id="video2" autoplay loop muted playsinline webkit-playsinline style="display: none" crossorigin="anonymous">
+        
+        <video id="video2" autoplay loop muted playsinline webkit-playsinline crossorigin="anonymous">
           <source src="Comp2.webm" type="video/webm" />
         </video>
       </a-assets>
@@ -44,7 +109,7 @@
           material="shader: flat; transparent: true; opacity: 0;">
         </a-video>
         
-        <!-- Model - Removed gesture-handler since it's not loaded -->
+        <!-- Model -->
         <a-entity
           scale="1 1 1"
           animation-mixer="loop: repeat"
@@ -59,6 +124,11 @@
     </a-scene>
 
     <script>
+      // Get DOM elements
+      const welcomeScreen = document.getElementById('welcomeScreen');
+      const startButton = document.getElementById('startButton');
+      const arScene = document.getElementById('arScene');
+      const debugInfo = document.getElementById('debugInfo');
       const video1 = document.querySelector("#video1");
       const video2 = document.querySelector("#video2");
       const videoPlane1 = document.querySelector("#videoPlane1");
@@ -67,11 +137,60 @@
 
       let playTimeout1, playTimeout2;
       let stopTimeout1, stopTimeout2;
+      let videosInitialized = false;
+      
+      // Debug function - only display in console
+      function debug(message) {
+        console.log(message);
+        // Uncomment the line below if you want to see debug messages on screen
+        // debugInfo.innerHTML += message + '<br>';
+      }
+      
+      // Start the AR experience when user clicks the start button
+      startButton.addEventListener('click', function() {
+        debug('Starting AR experience');
+        
+        // Hide welcome screen
+        welcomeScreen.style.display = 'none';
+        
+        // Show AR scene
+        arScene.setAttribute('visible', 'true');
+        
+        // Initialize videos
+        initializeVideos();
+      });
+      
+      // Initialize videos
+      function initializeVideos() {
+        debug('Initializing videos');
+        
+        // Pre-load videos
+        try {
+          video1.load();
+          video2.load();
+        } catch (e) {
+          debug('Error loading videos: ' + e.message);
+        }
+        
+        // Try to play and immediately pause to satisfy user interaction requirement
+        Promise.all([
+          video1.play().then(() => video1.pause()).catch(e => debug('Video 1 init failed: ' + e.message)),
+          video2.play().then(() => video2.pause()).catch(e => debug('Video 2 init failed: ' + e.message))
+        ]).then(() => {
+          videosInitialized = true;
+          debug('Videos successfully initialized');
+        }).catch(error => {
+          debug('Could not initialize videos: ' + error.message);
+        });
+      }
       
       // Video play handler functions
       function playVideo1() {
+        debug('Attempting to play video 1');
+        
         video1.play()
           .then(() => {
+            debug('Video 1 playing');
             videoPlane1.setAttribute("material", "opacity", "1");
             
             // Stop video1 after 8 seconds of playing
@@ -81,12 +200,19 @@
               video1.currentTime = 0;
             }, 8000);
           })
-          .catch(error => console.error("Error playing video 1:", error));
+          .catch(error => {
+            debug('Error playing video 1: ' + error.message);
+            // Show first frame as fallback
+            videoPlane1.setAttribute("material", "opacity", "1");
+          });
       }
       
       function playVideo2() {
+        debug('Attempting to play video 2');
+        
         video2.play()
           .then(() => {
+            debug('Video 2 playing');
             videoPlane2.setAttribute("material", "opacity", "1");
             
             // Stop video2 after 8 seconds of playing
@@ -96,11 +222,17 @@
               video2.currentTime = 0;
             }, 8000);
           })
-          .catch(error => console.error("Error playing video 2:", error));
+          .catch(error => {
+            debug('Error playing video 2: ' + error.message);
+            // Show first frame as fallback
+            videoPlane2.setAttribute("material", "opacity", "1");
+          });
       }
 
       // Reset all videos and timers
       function resetVideos() {
+        debug('Resetting videos');
+        
         // Clear all timeouts
         clearTimeout(playTimeout1);
         clearTimeout(playTimeout2);
@@ -112,13 +244,19 @@
         videoPlane2.setAttribute("material", "opacity", "0");
 
         // Reset videos
-        video1.pause();
-        video2.pause();
-        video1.currentTime = 0;
-        video2.currentTime = 0;
+        try {
+          video1.pause();
+          video2.pause();
+          video1.currentTime = 0;
+          video2.currentTime = 0;
+        } catch (e) {
+          debug('Error in reset: ' + e.message);
+        }
       }
 
       marker.addEventListener("markerFound", () => {
+        debug('Marker found');
+        
         // Reset everything first to handle reconnection properly
         resetVideos();
         
@@ -130,7 +268,41 @@
       });
 
       marker.addEventListener("markerLost", () => {
+        debug('Marker lost');
         resetVideos();
+      });
+      
+      // Extra event to help with iOS video playback
+      document.addEventListener('touchstart', function() {
+        if (!videosInitialized) {
+          debug('Touch event - trying to initialize videos again');
+          initializeVideos();
+        }
+      }, {once: true});
+      
+      // Debug toggle - triple tap top-left corner to show/hide debug info
+      let tapCount = 0;
+      let lastTap = 0;
+      
+      document.addEventListener('touchstart', function(e) {
+        const now = new Date().getTime();
+        const x = e.touches[0].clientX;
+        const y = e.touches[0].clientY;
+        
+        // Only count taps in the top-left corner (first 50x50 pixels)
+        if (x < 50 && y < 50) {
+          if (now - lastTap < 300) {
+            tapCount++;
+            if (tapCount === 3) {
+              // Toggle debug info after triple tap
+              debugInfo.style.display = debugInfo.style.display === 'none' ? 'block' : 'none';
+              tapCount = 0;
+            }
+          } else {
+            tapCount = 1;
+          }
+          lastTap = now;
+        }
       });
     </script>
   </body>
