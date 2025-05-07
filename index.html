@@ -197,12 +197,12 @@
             debug('Video 1 playing');
             videoPlane1.setAttribute("material", "opacity", "1");
             
-            // Stop video1 after 8 seconds of playing
+            // Stop video1 after 15 seconds of playing
             stopTimeout1 = setTimeout(() => {
               video1.pause();
               videoPlane1.setAttribute("material", "opacity", "0");
               video1.currentTime = 0;
-            }, 8000);
+            }, 15000);
           })
           .catch(error => {
             debug('Error playing video 1: ' + error.message);
@@ -219,12 +219,12 @@
             debug('Video 2 playing');
             videoPlane2.setAttribute("material", "opacity", "1");
             
-            // Stop video2 after 8 seconds of playing
+            // Stop video2 after 15 seconds of playing
             stopTimeout2 = setTimeout(() => {
               video2.pause();
               videoPlane2.setAttribute("material", "opacity", "0");
               video2.currentTime = 0;
-            }, 8000);
+            }, 15000);
           })
           .catch(error => {
             debug('Error playing video 2: ' + error.message);
