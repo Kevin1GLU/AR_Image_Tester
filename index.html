@@ -129,6 +129,27 @@
         </a-entity>
       </a-marker>
 
+<!-- Marker -->
+<a-marker type="pattern" url="markerr2.patt"
+      
+smooth="true" 
+smoothCount="10" 
+smoothTolerance="0.01" 
+smoothThreshold="2">
+
+  <!-- Video 1 -->
+  <a-video 
+    src="#video1" 
+    id="videoPlane1"
+    width="1.5" 
+    height="0.818" 
+    position="0.8 0.2 0.5"
+    rotation="-90 0 0"
+    material="shader: flat; transparent: depthWrite: true; depthTest: true; true; opacity: 0;">
+  </a-video>
+</a-marker>
+
+
       <!-- Camera -->
       <a-entity camera></a-entity>
     </a-scene>
