@@ -65,7 +65,7 @@
   <body style="margin: 0; overflow: hidden">
     <!-- Welcome Screen -->
     <div id="welcomeScreen">
-      <div id="welcomeMessage">Scan de Foto!</div>
+      <div id="welcomeMessage">Scan het Patroon</div>
       <button id="startButton">OK</button>
     </div>
     
@@ -88,8 +88,8 @@
         </video>
       </a-assets>
 
-      <!-- Marker -->
-      <a-marker type="pattern" url="markerr.patt"
+      <!-- Marker 1 --------------------------------------------------------------------------------------------------------------------------->
+      <a-marker type="pattern" url="Marker1.patt"
       
       smooth="true" 
       smoothCount="10" 
@@ -104,7 +104,7 @@
           height="0.818" 
           position="0.8 0.2 0.5"
           rotation="-90 0 0"
-          material="shader: flat; transparent: depthWrite: true; depthTest: true; true; opacity: 0;">
+          material="shader: flat; transparent: true; alphaTest: 0.01; depthTest: false; opacity: 0;">
         </a-video>
 
         <!-- Video 2 -->
@@ -115,7 +115,7 @@
           height="0.818" 
           position="0.8 0.2 -0.5"
           rotation="-90 0 0"
-          material="shader: flat; transparent: true; depthWrite: true; depthTest: true; opacity: 0;">
+          material="shader: flat; transparent: true; alphaTest: 0.01; depthTest: false; opacity: 0;">
         </a-video>
         
         <!-- Model -->
@@ -129,25 +129,25 @@
         </a-entity>
       </a-marker>
 
-<!-- Marker -->
-<a-marker type="pattern" url="markerr2.patt"
-      
-smooth="true" 
-smoothCount="10" 
-smoothTolerance="0.01" 
-smoothThreshold="2">
+      <!-- Marker 2 --------------------------------------------------------------------------------------------------------------------------->
+      <a-marker type="pattern" url="Marker2.patt"
+            
+      smooth="true" 
+      smoothCount="10" 
+      smoothTolerance="0.01" 
+      smoothThreshold="2">
 
-  <!-- Video 1 -->
-  <a-video 
-    src="#video1" 
-    id="videoPlane1"
-    width="1.5" 
-    height="0.818" 
-    position="0.8 0.2 0.5"
-    rotation="-90 0 0"
-    material="shader: flat; transparent: depthWrite: true; depthTest: true; true; opacity: 0;">
-  </a-video>
-</a-marker>
+        <!-- Video 1 -->
+        <a-video 
+          src="#video1" 
+          id="videoPlane1"
+          width="1.5" 
+          height="0.818" 
+          position="0.8 0.2 0.5"
+          rotation="-90 0 0"
+          material="shader: flat; transparent: true; alphaTest: 0.01; depthTest: false; opacity: 0;">
+        </a-video>
+      </a-marker>
 
 
       <!-- Camera -->
