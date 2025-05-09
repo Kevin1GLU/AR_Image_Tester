@@ -45,21 +45,57 @@
         border-radius: 5px;
         cursor: pointer;
       }
-      
-      /* Small debug panel that can be toggled */
-      #debugInfo {
+
+      /* Loading indicator styles */
+      #loadingIndicator {
+        display: none;
         position: fixed;
-        top: 10px;
-        left: 10px;
-        background-color: rgba(0, 0, 0, 0.7);
-        color: white;
-        padding: 5px;
-        font-size: 12px;
-        z-index: 999;
-        max-width: 80%;
-        overflow: hidden;
-        display: none; /* Initially hidden */
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(1, 39, 51, 0.8);
+        z-index: 9998;
+        justify-content: center;
+        align-items: center;
+        color: #b7bb9d;
+        font-family: Arial, sans-serif;
+        font-size: 20px;
       }
+      
+      /* Error message styles */
+      #errorMessage {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(139, 0, 0, 0.8);
+        z-index: 9997;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        color: white;
+        font-family: Arial, sans-serif;
+        text-align: center;
+        padding: 20px;
+      }
+      
+      #retryButton {
+        background-color: white;
+        border: none;
+        color: #8b0000;
+        padding: 12px 24px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 20px;
+      }
+      
     </style>
   </head>
   <body style="margin: 0; overflow: hidden">
@@ -67,6 +103,15 @@
     <div id="welcomeScreen">
       <div id="welcomeMessage">Scan het Patroon</div>
       <button id="startButton">OK</button>
+    </div>
+    
+    <!-- Loading Indicator -->
+    <div id="loadingIndicator">Laden...</div>
+    
+    <!-- Error Message -->
+    <div id="errorMessage">
+      <div>Er is een fout opgetreden. Probeer het opnieuw.</div>
+      <button id="retryButton">Opnieuw proberen</button>
     </div>
     
     <!-- Debug info panel - only shown when needed -->
@@ -160,6 +205,9 @@
       const startButton = document.getElementById('startButton');
       const arScene = document.getElementById('arScene');
       const debugInfo = document.getElementById('debugInfo');
+      const loadingIndicator = document.getElementById('loadingIndicator');
+      const errorMessage = document.getElementById('errorMessage');
+      const retryButton = document.getElementById('retryButton');
       const video1 = document.querySelector("#video1");
       const video2 = document.querySelector("#video2");
       const videoPlane1 = document.querySelector("#videoPlane1");
@@ -184,11 +232,68 @@
         // Hide welcome screen
         welcomeScreen.style.display = 'none';
         
+        // Show loading indicator
+        loadingIndicator.style.display = 'flex';
+        
+        // iOS requires a user gesture to access camera
+        // Wait a short moment before initializing AR to ensure iOS is ready
+        setTimeout(() => {
+          initializeAR();
+        }, 100);
+      });
+      
+      // Initialize AR components
+      function initializeAR() {
+        debug('Initializing AR');
+        
         // Show AR scene
         arScene.setAttribute('visible', 'true');
         
         // Initialize videos
         initializeVideos();
+        
+        // Set a timeout to ensure camera is accessed
+        const cameraTimeout = setTimeout(() => {
+          // Check if camera is working by looking for video element created by AR.js
+          const arVideo = document.querySelector('.a-canvas');
+          
+          if (!arVideo || !arVideo.videoWidth) {
+            debug('Camera not accessible after timeout');
+            showError();
+          } else {
+            debug('Camera successfully initialized');
+            hideLoading();
+          }
+        }, 3000);
+        
+        // Listen for scene loaded event
+        arScene.addEventListener('loaded', () => {
+          debug('AR scene loaded');
+          clearTimeout(cameraTimeout);
+          hideLoading();
+        });
+        
+        // Listen for camera error events
+        document.querySelector('a-entity[camera]').addEventListener('cameraaccessdenied', () => {
+          debug('Camera access denied');
+          showError();
+        });
+      }
+      
+      // Show error message
+      function showError() {
+        hideLoading();
+        errorMessage.style.display = 'flex';
+      }
+      
+      // Hide loading indicator
+      function hideLoading() {
+        loadingIndicator.style.display = 'none';
+      }
+      
+      // Retry button handler
+      retryButton.addEventListener('click', () => {
+        window.location.reload();
       });
       
       // Initialize videos
@@ -285,54 +390,53 @@
         }
       }
 
-      marker.addEventListener("markerFound", () => {
-        debug('Marker found');
-        
-        // Reset everything first to handle reconnection properly
-        resetVideos();
-        
-        // Delay video1 by 5 seconds
-        playTimeout1 = setTimeout(playVideo1, 5000);
-
-        // Delay video2 by 2 seconds
-        playTimeout2 = setTimeout(playVideo2, 2000);
-      });
-
-      marker.addEventListener("markerLost", () => {
-        debug('Marker lost');
-        resetVideos();
+      // Add event listener to marker after scene is loaded
+      document.addEventListener('DOMContentLoaded', () => {
+        if (marker) {
+          marker.addEventListener("markerFound", () => {
+            debug('Marker found');
+            
+            // Reset everything first to handle reconnection properly
+            resetVideos();
+            
+            // Delay video1 by 5 seconds
+            playTimeout1 = setTimeout(playVideo1, 5000);
+    
+            // Delay video2 by 2 seconds
+            playTimeout2 = setTimeout(playVideo2, 2000);
+          });
+    
+          marker.addEventListener("markerLost", () => {
+            debug('Marker lost');
+            resetVideos();
+          });
+        }
       });
       
       // Extra event to help with iOS video playback
-      document.addEventListener('touchstart', function() {
+      document.addEventListener('touchend', function() {
         if (!videosInitialized) {
           debug('Touch event - trying to initialize videos again');
           initializeVideos();
         }
-      }, {once: true});
+      }, {once: false});
       
-      // Debug toggle - triple tap top-left corner to show/hide debug info
-      let tapCount = 0;
-      let lastTap = 0;
+      // iOS specific camera fixes
+      document.addEventListener('touchstart', function() {
+        // This helps iOS activate the camera
+        debug('Touch event registered - good for iOS camera permissions');
+      }, {once: false});
       
-      document.addEventListener('touchstart', function(e) {
-        const now = new Date().getTime();
-        const x = e.touches[0].clientX;
-        const y = e.touches[0].clientY;
-        
-        // Only count taps in the top-left corner (first 50x50 pixels)
-        if (x < 50 && y < 50) {
-          if (now - lastTap < 300) {
-            tapCount++;
-            if (tapCount === 3) {
-              // Toggle debug info after triple tap
-              debugInfo.style.display = debugInfo.style.display === 'none' ? 'block' : 'none';
-              tapCount = 0;
-            }
-          } else {
-            tapCount = 1;
-          }
-          lastTap = now;
+      // Make sure AR.js has properly initialized
+      window.addEventListener('artoolkit-loaded', function() {
+        debug('AR Toolkit loaded');
+      });
+      
+      // Handle iOS sudden camera errors
+      window.addEventListener('error', function(event) {
+        if (event.message && event.message.includes('getUserMedia')) {
+          debug('getUserMedia error detected');
+          showError();
         }
       });
     </script>
