@@ -34,7 +34,7 @@
       }
       
       #startButton {
-        background-color: #b7bb9d;
+        background-color: #ff0000;
         border: none;
         color: #012733;
         padding: 15px 32px;
@@ -177,7 +177,6 @@
 
       let playTimeout1, playTimeout2;
       let stopTimeout1, stopTimeout2;
-      let videosInitialized = false;
       
       // Debug function - only display in console
       function debug(message) {
@@ -215,9 +214,6 @@
         // Show AR scene
         arScene.setAttribute('visible', 'true');
         
-        // Initialize videos
-        initializeVideos();
-        
         // Set a timeout to ensure camera is accessed, but don't show error automatically
         const cameraTimeout = setTimeout(() => {
           debug('Camera initialization timeout reached');
@@ -253,38 +249,6 @@
       retryButton.addEventListener('click', () => {
         window.location.reload();
       });
-      
-
-      // Add event listener to marker after scene is loaded
-      document.addEventListener('DOMContentLoaded', () => {
-        if (marker) {
-          marker.addEventListener("markerFound", () => {
-            debug('Marker found');
-            
-            // Reset everything first to handle reconnection properly
-            resetVideos();
-            
-            // Delay video1 by 5 seconds
-            playTimeout1 = setTimeout(playVideo1, 5000);
-    
-            // Delay video2 by 2 seconds
-            playTimeout2 = setTimeout(playVideo2, 2000);
-          });
-    
-          marker.addEventListener("markerLost", () => {
-            debug('Marker lost');
-            resetVideos();
-          });
-        }
-      });
-      
-      // Extra event to help with iOS video playback
-      document.addEventListener('touchend', function() {
-        if (!videosInitialized) {
-          debug('Touch event - trying to initialize videos again');
-          initializeVideos();
-        }
-      }, {once: false});
       
       // iOS specific camera fixes
       document.addEventListener('touchstart', function() {
