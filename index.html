@@ -232,14 +232,19 @@
         // Hide welcome screen
         welcomeScreen.style.display = 'none';
         
-        // Show loading indicator
+        // Show loading indicator for a brief moment
         loadingIndicator.style.display = 'flex';
         
         // iOS requires a user gesture to access camera
-        // Wait a short moment before initializing AR to ensure iOS is ready
+        // Start AR immediately for better iOS compatibility
+        initializeAR();
+        
+        // Hide loading after a short delay if it's still showing
         setTimeout(() => {
-          initializeAR();
-        }, 100);
+          if (loadingIndicator.style.display === 'flex') {
+            hideLoading();
+          }
+        }, 1500);
       });
       
       // Initialize AR components
@@ -252,18 +257,10 @@
         // Initialize videos
         initializeVideos();
         
-        // Set a timeout to ensure camera is accessed
+        // Set a timeout to ensure camera is accessed, but don't show error automatically
         const cameraTimeout = setTimeout(() => {
-          // Check if camera is working by looking for video element created by AR.js
-          const arVideo = document.querySelector('.a-canvas');
-          
-          if (!arVideo || !arVideo.videoWidth) {
-            debug('Camera not accessible after timeout');
-            showError();
-          } else {
-            debug('Camera successfully initialized');
-            hideLoading();
-          }
+          debug('Camera initialization timeout reached');
+          hideLoading();
         }, 3000);
         
         // Listen for scene loaded event
@@ -273,7 +270,7 @@
           hideLoading();
         });
         
-        // Listen for camera error events
+        // Only listen for explicit camera access denied events
         document.querySelector('a-entity[camera]').addEventListener('cameraaccessdenied', () => {
           debug('Camera access denied');
           showError();
@@ -432,10 +429,12 @@
         debug('AR Toolkit loaded');
       });
       
-      // Handle iOS sudden camera errors
+      // Only handle critical camera errors
       window.addEventListener('error', function(event) {
-        if (event.message && event.message.includes('getUserMedia')) {
-          debug('getUserMedia error detected');
+        if (event.message && 
+            event.message.includes('getUserMedia') && 
+            event.message.includes('NotAllowedError')) {
+          debug('Camera permission denied error detected');
           showError();
         }
       });
