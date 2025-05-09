@@ -125,11 +125,9 @@
         
         <!-- WebM videos for transparency -->
         <video id="video1" autoplay loop muted playsinline webkit-playsinline crossorigin="anonymous">
-          <source src="Vid_Mask1.webm" type="video/webm" />
         </video>
         
         <video id="video2" autoplay loop muted playsinline webkit-playsinline crossorigin="anonymous">
-          <source src="Vid_Mask2.webm" type="video/webm" />
         </video>
       </a-assets>
 
@@ -214,6 +212,40 @@
       const videoPlane1 = document.querySelector("#videoPlane1");
       const videoPlane2 = document.querySelector("#videoPlane2");
       const marker = document.querySelector("a-marker");
+
+
+      function isAppleDevice() {
+    return /iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent) &&
+           navigator.userAgent.includes("Safari") &&
+           !navigator.userAgent.includes("Chrome");
+  }
+
+  function createVideoElement(id, movSrc, webmSrc) {
+    const video = document.createElement('video');
+    video.setAttribute('id', id);
+    video.setAttribute('autoplay', '');
+    video.setAttribute('loop', '');
+    video.setAttribute('muted', '');
+    video.setAttribute('playsinline', '');
+
+    const source = document.createElement('source');
+    if (isAppleDevice()) {
+      source.setAttribute('src', movSrc);
+      source.setAttribute('type', 'video/quicktime');
+    } else {
+      source.setAttribute('src', webmSrc);
+      source.setAttribute('type', 'video/webm');
+    }
+
+    video.appendChild(source);
+    document.querySelector('a-assets').appendChild(video);
+  }
+
+  // Create video elements for both video planes
+  createVideoElement('video1', 'Vid_Mask1.mov', 'Vid_Mask1.webm');
+  createVideoElement('video2', 'Vid_Mask2.mov', 'Vid_Mask2.webm');
+
+
 
       let playTimeout1, playTimeout2;
       let stopTimeout1, stopTimeout2;
