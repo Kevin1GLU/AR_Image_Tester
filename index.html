@@ -124,13 +124,6 @@
         <a-asset-item id="animated-asset" src="model4.glb"></a-asset-item>
         
         <!-- WebM videos for transparency -->
-        <video id="video1" autoplay loop muted playsinline webkit-playsinline crossorigin="anonymous">
-          <source src="Comp1.webm" type="video/webm" />
-        </video>
-        
-        <video id="video2" autoplay loop muted playsinline webkit-playsinline crossorigin="anonymous">
-          <source src="Comp2.webm" type="video/webm" />
-        </video>
       </a-assets>
 
       <!-- Marker 1 --------------------------------------------------------------------------------------------------------------------------->
@@ -142,26 +135,7 @@
       smoothThreshold="2">
       
         <!-- Video 1 -->
-        <a-video 
-          src="#video1" 
-          id="videoPlane1"
-          width="1.5" 
-          height="0.818" 
-          position="0.8 0.2 0.5"
-          rotation="-90 0 0"
-          material="shader: flat; transparent: true; alphaTest: 0.01; depthTest: true; opacity: 0;">
-        </a-video>
-
-        <!-- Video 2 -->
-        <a-video 
-          src="#video2"
-          id="videoPlane2"
-          width="1.5" 
-          height="0.818" 
-          position="0.8 0.2 -0.5"
-          rotation="-90 0 0"
-          material="shader: flat; transparent: true; alphaTest: 0.01; depthTest: true; opacity: 0;">
-        </a-video>
+      
         
         <!-- Model -->
         <a-entity
@@ -183,15 +157,6 @@
       smoothThreshold="2">
 
         <!-- Video 1 -->
-        <a-video 
-          src="#video1" 
-          id="videoPlane1"
-          width="1.5" 
-          height="0.818" 
-          position="0.8 0.2 0.5"
-          rotation="-90 0 0"
-          material="shader: flat; transparent: true; alphaTest: 0.01; depthTest: false; opacity: 0;">
-        </a-video>
       </a-marker>
 
 
@@ -208,10 +173,6 @@
       const loadingIndicator = document.getElementById('loadingIndicator');
       const errorMessage = document.getElementById('errorMessage');
       const retryButton = document.getElementById('retryButton');
-      const video1 = document.querySelector("#video1");
-      const video2 = document.querySelector("#video2");
-      const videoPlane1 = document.querySelector("#videoPlane1");
-      const videoPlane2 = document.querySelector("#videoPlane2");
       const marker = document.querySelector("a-marker");
 
       let playTimeout1, playTimeout2;
@@ -293,99 +254,6 @@
         window.location.reload();
       });
       
-      // Initialize videos
-      function initializeVideos() {
-        debug('Initializing videos');
-        
-        // Pre-load videos
-        try {
-          video1.load();
-          video2.load();
-        } catch (e) {
-          debug('Error loading videos: ' + e.message);
-        }
-        
-        // Try to play and immediately pause to satisfy user interaction requirement
-        Promise.all([
-          video1.play().then(() => video1.pause()).catch(e => debug('Video 1 init failed: ' + e.message)),
-          video2.play().then(() => video2.pause()).catch(e => debug('Video 2 init failed: ' + e.message))
-        ]).then(() => {
-          videosInitialized = true;
-          debug('Videos successfully initialized');
-        }).catch(error => {
-          debug('Could not initialize videos: ' + error.message);
-        });
-      }
-      
-      // Video play handler functions
-      function playVideo1() {
-        debug('Attempting to play video 1');
-        
-        video1.play()
-          .then(() => {
-            debug('Video 1 playing');
-            videoPlane1.setAttribute("material", "opacity", "1");
-            
-            // Stop video1 after 15 seconds of playing
-            stopTimeout1 = setTimeout(() => {
-              video1.pause();
-              videoPlane1.setAttribute("material", "opacity", "0");
-              video1.currentTime = 0;
-            }, 15000);
-          })
-          .catch(error => {
-            debug('Error playing video 1: ' + error.message);
-            // Show first frame as fallback
-            videoPlane1.setAttribute("material", "opacity", "1");
-          });
-      }
-      
-      function playVideo2() {
-        debug('Attempting to play video 2');
-        
-        video2.play()
-          .then(() => {
-            debug('Video 2 playing');
-            videoPlane2.setAttribute("material", "opacity", "1");
-            
-            // Stop video2 after 15 seconds of playing
-            stopTimeout2 = setTimeout(() => {
-              video2.pause();
-              videoPlane2.setAttribute("material", "opacity", "0");
-              video2.currentTime = 0;
-            }, 15000);
-          })
-          .catch(error => {
-            debug('Error playing video 2: ' + error.message);
-            // Show first frame as fallback
-            videoPlane2.setAttribute("material", "opacity", "1");
-          });
-      }
-
-      // Reset all videos and timers
-      function resetVideos() {
-        debug('Resetting videos');
-        
-        // Clear all timeouts
-        clearTimeout(playTimeout1);
-        clearTimeout(playTimeout2);
-        clearTimeout(stopTimeout1);
-        clearTimeout(stopTimeout2);
-
-        // Reset video planes opacity
-        videoPlane1.setAttribute("material", "opacity", "0");
-        videoPlane2.setAttribute("material", "opacity", "0");
-
-        // Reset videos
-        try {
-          video1.pause();
-          video2.pause();
-          video1.currentTime = 0;
-          video2.currentTime = 0;
-        } catch (e) {
-          debug('Error in reset: ' + e.message);
-        }
-      }
 
       // Add event listener to marker after scene is loaded
       document.addEventListener('DOMContentLoaded', () => {
