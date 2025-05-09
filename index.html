@@ -145,8 +145,8 @@
         <a-video 
           src="#video1" 
           id="videoPlane1"
-          width="2.7" 
-          height="2.7" 
+          width="3" 
+          height="3" 
           position="-2.5 0.2 0"
           rotation="-90 0 0"
           material="shader: flat; transparent: true; alphaTest: 0.01; depthTest: true; opacity: 0;">
@@ -332,7 +332,7 @@
               video1.pause();
               videoPlane1.setAttribute("material", "opacity", "0");
               video1.currentTime = 0;
-            }, 15000);
+            }, 25000);
           })
           .catch(error => {
             debug('Error playing video 1: ' + error.message);
@@ -354,7 +354,7 @@
               video2.pause();
               videoPlane2.setAttribute("material", "opacity", "0");
               video2.currentTime = 0;
-            }, 15000);
+            }, 25000);
           })
           .catch(error => {
             debug('Error playing video 2: ' + error.message);
