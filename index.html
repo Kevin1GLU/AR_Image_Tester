@@ -13,7 +13,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: #000cf7;
+        background-color: #f700e7;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -92,7 +92,7 @@
           height="0.818" 
           position="0.8 0.2 0.5"
           rotation="-90 0 0"
-          material="shader: flat; transparent: true; alphaTest: 0.01; depthTest: true; opacity: 0;">
+          material="shader: unlit; transparent: true; alphaTest: 0.01; depthTest: true; opacity: 0;">
         </a-video>
 
         <!-- Video 2 -->
@@ -103,7 +103,7 @@
           height="0.818" 
           position="0.8 0.2 -0.5"
           rotation="-90 0 0"
-          material="shader: flat; transparent: true; alphaTest: 0.01; depthTest: true; opacity: 0;">
+          material="shader: unlit; transparent: true; alphaTest: 0.01; depthTest: true; opacity: 0;">
         </a-video>
         
         <!-- Model -->
@@ -113,7 +113,7 @@
           gltf-model="#model_background"
           position="0 0 0"
           rotation="0 0 0"
-          material="shader: flat; transparent: true; depthWrite: false;">
+          material="shader: unlit; transparent: true; depthWrite: true;">
         </a-entity>
 
         <!-- Model Background -->
@@ -123,7 +123,7 @@
           gltf-model="#model_01"
           position="0 0 0"
           rotation="0 0 0"
-          material="shader: flat; transparent: true; depthWrite: true;">
+          material="shader: unlit; transparent: true; depthWrite: true; opacity: 0.8;">
         </a-entity>
       </a-marker>
 
