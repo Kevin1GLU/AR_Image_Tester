@@ -45,73 +45,14 @@
         border-radius: 5px;
         cursor: pointer;
       }
-
-      /* Loading indicator styles */
-      #loadingIndicator {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(1, 39, 51, 0.8);
-        z-index: 9998;
-        justify-content: center;
-        align-items: center;
-        color: #b7bb9d;
-        font-family: Arial, sans-serif;
-        font-size: 20px;
-      }
-      
-      /* Error message styles */
-      #errorMessage {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(139, 0, 0, 0.8);
-        z-index: 9997;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        color: white;
-        font-family: Arial, sans-serif;
-        text-align: center;
-        padding: 20px;
-      }
-      
-      #retryButton {
-        background-color: white;
-        border: none;
-        color: #8b0000;
-        padding: 12px 24px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        border-radius: 5px;
-        cursor: pointer;
-        margin-top: 20px;
-      }
       
     </style>
   </head>
   <body style="margin: 0; overflow: hidden">
     <!-- Welcome Screen -->
     <div id="welcomeScreen">
-      <div id="welcomeMessage">Scan het Patroon</div>
+      <div id="welcomeMessage">Scan de QR code</div>
       <button id="startButton">OK</button>
-    </div>
-    
-    <!-- Loading Indicator -->
-    <div id="loadingIndicator">Laden...</div>
-    
-    <!-- Error Message -->
-    <div id="errorMessage">
-      <div>Er is een fout opgetreden. Probeer het opnieuw.</div>
-      <button id="retryButton">Opnieuw proberen</button>
     </div>
     
     <!-- Debug info panel - only shown when needed -->
@@ -125,9 +66,11 @@
         
         <!-- WebM videos for transparency -->
         <video id="video1" autoplay loop muted playsinline webkit-playsinline crossorigin="anonymous">
+          <source src="Comp1.webm" type="video/webm" />
         </video>
         
         <video id="video2" autoplay loop muted playsinline webkit-playsinline crossorigin="anonymous">
+          <source src="Comp2.webm" type="video/webm" />
         </video>
       </a-assets>
 
@@ -143,9 +86,9 @@
         <a-video 
           src="#video1" 
           id="videoPlane1"
-          width="3" 
-          height="3" 
-          position="-2.5 0.2 -0.2"
+          width="1.5" 
+          height="0.818" 
+          position="0.8 0.2 0.5"
           rotation="-90 0 0"
           material="shader: flat; transparent: true; alphaTest: 0.01; depthTest: true; opacity: 0;">
         </a-video>
@@ -154,9 +97,9 @@
         <a-video 
           src="#video2"
           id="videoPlane2"
-          width="2.7" 
-          height="2.7" 
-          position="2.2 0.2 0.2"
+          width="1.5" 
+          height="0.818" 
+          position="0.8 0.2 -0.5"
           rotation="-90 0 0"
           material="shader: flat; transparent: true; alphaTest: 0.01; depthTest: true; opacity: 0;">
         </a-video>
@@ -195,7 +138,6 @@
 
       <!-- Camera -->
       <a-entity camera></a-entity>
-      <a-entity light="type: ambient; color: #ffffff; intensity: 1"></a-entity>
     </a-scene>
 
     <script>
@@ -204,48 +146,11 @@
       const startButton = document.getElementById('startButton');
       const arScene = document.getElementById('arScene');
       const debugInfo = document.getElementById('debugInfo');
-      const loadingIndicator = document.getElementById('loadingIndicator');
-      const errorMessage = document.getElementById('errorMessage');
-      const retryButton = document.getElementById('retryButton');
       const video1 = document.querySelector("#video1");
       const video2 = document.querySelector("#video2");
       const videoPlane1 = document.querySelector("#videoPlane1");
       const videoPlane2 = document.querySelector("#videoPlane2");
       const marker = document.querySelector("a-marker");
-
-
-      function isAppleDevice() {
-    return /iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent) &&
-           navigator.userAgent.includes("Safari") &&
-           !navigator.userAgent.includes("Chrome");
-  }
-
-  function createVideoElement(id, movSrc, webmSrc) {
-    const video = document.createElement('video');
-    video.setAttribute('id', id);
-    video.setAttribute('autoplay', '');
-    video.setAttribute('loop', '');
-    video.setAttribute('muted', '');
-    video.setAttribute('playsinline', '');
-
-    const source = document.createElement('source');
-    if (isAppleDevice()) {
-      source.setAttribute('src', movSrc);
-      source.setAttribute('type', 'video/quicktime');
-    } else {
-      source.setAttribute('src', webmSrc);
-      source.setAttribute('type', 'video/webm');
-    }
-
-    video.appendChild(source);
-    document.querySelector('a-assets').appendChild(video);
-  }
-
-  // Create video elements for both video planes
-  createVideoElement('video1', 'Vid_Mask1.mov', 'Vid_Mask1.webm');
-  createVideoElement('video2', 'Vid_Mask2.mov', 'Vid_Mask2.webm');
-
-
 
       let playTimeout1, playTimeout2;
       let stopTimeout1, stopTimeout2;
@@ -265,65 +170,11 @@
         // Hide welcome screen
         welcomeScreen.style.display = 'none';
         
-        // Show loading indicator for a brief moment
-        loadingIndicator.style.display = 'flex';
-        
-        // iOS requires a user gesture to access camera
-        // Start AR immediately for better iOS compatibility
-        initializeAR();
-        
-        // Hide loading after a short delay if it's still showing
-        setTimeout(() => {
-          if (loadingIndicator.style.display === 'flex') {
-            hideLoading();
-          }
-        }, 1500);
-      });
-      
-      // Initialize AR components
-      function initializeAR() {
-        debug('Initializing AR');
-        
         // Show AR scene
         arScene.setAttribute('visible', 'true');
         
         // Initialize videos
         initializeVideos();
-        
-        // Set a timeout to ensure camera is accessed, but don't show error automatically
-        const cameraTimeout = setTimeout(() => {
-          debug('Camera initialization timeout reached');
-          hideLoading();
-        }, 3000);
-        
-        // Listen for scene loaded event
-        arScene.addEventListener('loaded', () => {
-          debug('AR scene loaded');
-          clearTimeout(cameraTimeout);
-          hideLoading();
-        });
-        
-        // Only listen for explicit camera access denied events
-        document.querySelector('a-entity[camera]').addEventListener('cameraaccessdenied', () => {
-          debug('Camera access denied');
-          showError();
-        });
-      }
-      
-      // Show error message
-      function showError() {
-        hideLoading();
-        errorMessage.style.display = 'flex';
-      }
-      
-      // Hide loading indicator
-      function hideLoading() {
-        loadingIndicator.style.display = 'none';
-      }
-      
-      // Retry button handler
-      retryButton.addEventListener('click', () => {
-        window.location.reload();
       });
       
       // Initialize videos
@@ -420,57 +271,31 @@
         }
       }
 
-      // Add event listener to marker after scene is loaded
-      document.addEventListener('DOMContentLoaded', () => {
-        if (marker) {
-          marker.addEventListener("markerFound", () => {
-            debug('Marker found');
-            
-            // Reset everything first to handle reconnection properly
-            resetVideos();
-            
-            // Delay video1 by 5 seconds
-            playTimeout1 = setTimeout(playVideo1, 5000);
-    
-            // Delay video2 by 2 seconds
-            playTimeout2 = setTimeout(playVideo2, 2000);
-          });
-    
-          marker.addEventListener("markerLost", () => {
-            debug('Marker lost');
-            resetVideos();
-          });
-        }
+      marker.addEventListener("markerFound", () => {
+        debug('Marker found');
+        
+        // Reset everything first to handle reconnection properly
+        resetVideos();
+        
+        // Delay video1 by 5 seconds
+        playTimeout1 = setTimeout(playVideo1, 5000);
+
+        // Delay video2 by 2 seconds
+        playTimeout2 = setTimeout(playVideo2, 2000);
+      });
+
+      marker.addEventListener("markerLost", () => {
+        debug('Marker lost');
+        resetVideos();
       });
       
       // Extra event to help with iOS video playback
-      document.addEventListener('touchend', function() {
+      document.addEventListener('touchstart', function() {
         if (!videosInitialized) {
           debug('Touch event - trying to initialize videos again');
           initializeVideos();
         }
-      }, {once: false});
-      
-      // iOS specific camera fixes
-      document.addEventListener('touchstart', function() {
-        // This helps iOS activate the camera
-        debug('Touch event registered - good for iOS camera permissions');
-      }, {once: false});
-      
-      // Make sure AR.js has properly initialized
-      window.addEventListener('artoolkit-loaded', function() {
-        debug('AR Toolkit loaded');
-      });
-      
-      // Only handle critical camera errors
-      window.addEventListener('error', function(event) {
-        if (event.message && 
-            event.message.includes('getUserMedia') && 
-            event.message.includes('NotAllowedError')) {
-          debug('Camera permission denied error detected');
-          showError();
-        }
-      });
+      }, {once: true});
     </script>
   </body>
 </html>
