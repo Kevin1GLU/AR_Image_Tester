@@ -13,7 +13,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: #13322e;
+        background-color: #321313;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -361,6 +361,29 @@
           });
       }
 
+      function playVideo3() {
+        debug('Attempting to play video 3');
+        
+        video3.play()
+          .then(() => {
+            debug('Video 3 playing');
+            // Animate scale from 0 to 1 over 1 second
+            animateScale(videoContainer2, 1000);
+            
+            // Stop video2 after 40 seconds of playing
+            stopTimeout3 = setTimeout(() => {
+              video3.pause();
+              videoContainer2.setAttribute('scale', '0 0 0');
+              video3.currentTime = 0;
+            }, 40000);
+          })
+          .catch(error => {
+            debug('Error playing video 2: ' + error.message);
+            // Show anyway as fallback
+            animateScale(videoContainer2, 1000);
+          });
+      }
+
        // Reset models animation by recreating the animation-mixer component
        function resetModelAnimations() {
         debug('Resetting model animations');
@@ -409,22 +432,22 @@
             }
           }
 
-          if (model_01_Mirthe_1) {
+          if (model_01_Mirthe) {
             // Get the 3D model's animation component
-            const mixer = model_01_Melissa.components["animation-mixer"];
+            const mixer = model_01_Mirthe.components["animation-mixer"];
             if (mixer && mixer.mixer) {
               // Access the THREE.js animation mixer directly if possible
               mixer.mixer.stopAllAction();
               mixer.mixer.update(0);
               // Force the component to re-initialize
-              model_01_Mirthe_1.removeAttribute('animation-mixer');
-              model_01_Mirthe_1.setAttribute('animation-mixer', 'loop: repeat; clampWhenFinished: true;');
+              model_01_Mirthe.removeAttribute('animation-mixer');
+              model_01_Mirthe.setAttribute('animation-mixer', 'loop: repeat; clampWhenFinished: true;');
               debug('Main model animation reset');
             } else {
               // Fallback for when direct mixer access fails
-              model_01_Mirthe_1.removeAttribute('animation-mixer');
+              model_01_Mirthe.removeAttribute('animation-mixer');
               setTimeout(() => {
-                model_01_Mirthe_1.setAttribute('animation-mixer', 'loop: repeat; clampWhenFinished: true;');
+                model_01_Mirthe.setAttribute('animation-mixer', 'loop: repeat; clampWhenFinished: true;');
                 debug('Main model animation reset (fallback)');
               }, 50);
             }
@@ -443,8 +466,10 @@
         // Clear all timeouts
         clearTimeout(playTimeout1);
         clearTimeout(playTimeout2);
+        clearTimeout(playTimeout3);
         clearTimeout(stopTimeout1);
         clearTimeout(stopTimeout2);
+        clearTimeout(stopTimeout3);
 
         // Reset video containers to minimum scale
         videoContainer1.setAttribute('scale', '0 0 0');
@@ -454,8 +479,10 @@
         try {
           video1.pause();
           video2.pause();
+          video3.pause();
           video1.currentTime = 0;
           video2.currentTime = 0;
+          video3.currentTime = 0;
         } catch (e) {
           debug('Error in reset: ' + e.message);
         }
