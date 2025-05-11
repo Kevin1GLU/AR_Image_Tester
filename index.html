@@ -13,7 +13,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: #e295d5;
+        background-color: #dce295;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -238,6 +238,7 @@
       const debugInfo = document.getElementById('debugInfo');
       const video1 = document.querySelector("#video1");
       const video2 = document.querySelector("#video2");
+      const video3 = document.querySelector("#video3");
       const videoContainer1 = document.querySelector("#videoContainer1");
       const videoContainer2 = document.querySelector("#videoContainer2");
       const marker = document.querySelector("a-marker");
@@ -275,6 +276,7 @@
         try {
           video1.load();
           video2.load();
+          video3.load();
         } catch (e) {
           debug('Error loading videos: ' + e.message);
         }
@@ -282,7 +284,8 @@
         // Try to play and immediately pause to satisfy user interaction requirement
         Promise.all([
           video1.play().then(() => video1.pause()).catch(e => debug('Video 1 init failed: ' + e.message)),
-          video2.play().then(() => video2.pause()).catch(e => debug('Video 2 init failed: ' + e.message))
+          video2.play().then(() => video2.pause()).catch(e => debug('Video 2 init failed: ' + e.message)),
+          video3.play().then(() => video3.pause()).catch(e => debug('Video 3 init failed: ' + e.message))
         ]).then(() => {
           videosInitialized = true;
           debug('Videos successfully initialized');
@@ -379,7 +382,7 @@
             }, 40000);
           })
           .catch(error => {
-            debug('Error playing video 2: ' + error.message);
+            debug('Error playing video 3: ' + error.message);
             // Show anyway as fallback
             animateScale(videoContainer2, 1000);
           });
