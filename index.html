@@ -87,7 +87,7 @@
       </a-assets>
 
       <!-- Marker 1 Melissa --------------------------------------------------------------------------------------------------------------------------->
-      <a-marker type="pattern" url="Marker1.patt"
+      <a-marker id="marker1" type="pattern" url="Marker1.patt"
       
       smooth="true" 
       smoothCount="10" 
@@ -140,7 +140,7 @@
         
         <!-- Model Background -->
         <a-entity
-          id="backgroundModel"
+          id="backgroundModel1"
           scale="0.6 0.6 0.6"
           animation-mixer="loop: repeat"
           gltf-model="#model_background"
@@ -151,7 +151,7 @@
 
         <!-- Model  -->
         <a-entity
-          id="model_01_Melissa"
+          id="model_melissa"
           scale="0.6 0.6 0.6"
           animation-mixer="loop: repeat"
           gltf-model="#model_01"
@@ -164,7 +164,7 @@
 
 
       <!-- Marker 2 Mirthe Janus --------------------------------------------------------------------------------------------------------------------------->
-      <a-marker type="pattern" url="Marker2.patt"
+      <a-marker id="marker2" type="pattern" url="Marker2.patt"
       
       smooth="true" 
       smoothCount="10" 
@@ -174,17 +174,17 @@
 
         <!-- Video container 3 -->
         <a-entity id="videoContainer3" position="-1.5 0.4 0" rotation="-90 0 0" scale="0 0 0">
-          <!-- Video 2 -->
+          <!-- Video 3 -->
           <a-video 
             src="#video3"
-            id="videoPlane2"
+            id="videoPlane3"
             width="1.05" 
             height="0.5726"
             position="0 0 0"
             material="shader: flat; true; depthTest: true; alphaTest: 0.01; opacity: 1; transparent: true;">
           </a-video>
           
-          <!-- Frame/Border for Video 2 -->
+          <!-- Frame/Border for Video 3 -->
           <a-image 
             src="#frame2" 
             width="1.15" 
@@ -196,7 +196,7 @@
         
         <!-- Model Background -->
         <a-entity
-          id="backgroundModel"
+          id="backgroundModel2"
           scale="0.6 0.6 0.6"
           animation-mixer="loop: repeat"
           gltf-model="#model_background"
@@ -207,7 +207,7 @@
 
         <!-- Model  -->
         <a-entity
-          id="model_01_Mirthe"
+          id="model_mirthe"
           scale="0.6 0.6 0.6"
           animation-mixer="loop: repeat"
           gltf-model="#model_02"
@@ -227,25 +227,34 @@
 
     <script>
       // Get DOM elements
-
-      const backgroundModel = document.querySelector("#backgroundModel");
-      const model_01_Melissa = document.querySelector("#model_01_Melissa");
-      const model_01_Mirthe = document.querySelector("#model_01_Mirthe");
-
       const welcomeScreen = document.getElementById('welcomeScreen');
       const startButton = document.getElementById('startButton');
       const arScene = document.getElementById('arScene');
       const debugInfo = document.getElementById('debugInfo');
+      
+      // Get video elements
       const video1 = document.querySelector("#video1");
       const video2 = document.querySelector("#video2");
       const video3 = document.querySelector("#video3");
+      
+      // Get video containers
       const videoContainer1 = document.querySelector("#videoContainer1");
       const videoContainer2 = document.querySelector("#videoContainer2");
       const videoContainer3 = document.querySelector("#videoContainer3");
-      const marker = document.querySelector("a-marker");
+      
+      // Get markers
+      const marker1 = document.querySelector("#marker1");
+      const marker2 = document.querySelector("#marker2");
+      
+      // Get models - fixed ID references
+      const backgroundModel1 = document.querySelector("#backgroundModel1");
+      const backgroundModel2 = document.querySelector("#backgroundModel2");
+      const model_melissa = document.querySelector("#model_melissa");
+      const model_mirthe = document.querySelector("#model_mirthe");
 
-      let playTimeout1, playTimeout2;
-      let stopTimeout1, stopTimeout2;
+      // Timeouts
+      let playTimeout1, playTimeout2, playTimeout3;
+      let stopTimeout1, stopTimeout2, stopTimeout3;
       let videosInitialized = false;
       
       // Debug function - only display in console
@@ -375,7 +384,7 @@
             // Animate scale from 0 to 1 over 1 second
             animateScale(videoContainer3, 1000);
             
-            // Stop video2 after 40 seconds of playing
+            // Stop video3 after 40 seconds of playing
             stopTimeout3 = setTimeout(() => {
               video3.pause();
               videoContainer3.setAttribute('scale', '0 0 0');
@@ -389,81 +398,38 @@
           });
       }
 
-       // Reset models animation by recreating the animation-mixer component
-       function resetModelAnimations() {
+      // Reset model animations function - updated to handle both markers
+      function resetModelAnimations(models) {
         debug('Resetting model animations');
         
-        try {
-          // Force animation restart by changing the models' animation data
-          if (backgroundModel) {
-            // Get the 3D model's animation component
-            const mixer = backgroundModel.components["animation-mixer"];
-            if (mixer && mixer.mixer) {
-              // Access the THREE.js animation mixer directly if possible
-              mixer.mixer.stopAllAction();
-              mixer.mixer.update(0);
-              // Force the component to re-initialize
-              backgroundModel.removeAttribute('animation-mixer');
-              backgroundModel.setAttribute('animation-mixer', 'loop: repeat; clampWhenFinished: true;');
-              debug('Background model animation reset');
-            } else {
-              // Fallback for when direct mixer access fails
-              backgroundModel.removeAttribute('animation-mixer');
-              setTimeout(() => {
-                backgroundModel.setAttribute('animation-mixer', 'loop: repeat; clampWhenFinished: true;');
-                debug('Background model animation reset (fallback)');
-              }, 50);
+        models.forEach(model => {
+          try {
+            if (model) {
+              // Get the 3D model's animation component
+              const mixer = model.components["animation-mixer"];
+              if (mixer && mixer.mixer) {
+                // Access the THREE.js animation mixer directly if possible
+                mixer.mixer.stopAllAction();
+                mixer.mixer.update(0);
+                // Force the component to re-initialize
+                model.removeAttribute('animation-mixer');
+                model.setAttribute('animation-mixer', 'loop: repeat; clampWhenFinished: true;');
+                debug('Model animation reset: ' + model.id);
+              } else {
+                // Fallback for when direct mixer access fails
+                model.removeAttribute('animation-mixer');
+                setTimeout(() => {
+                  model.setAttribute('animation-mixer', 'loop: repeat; clampWhenFinished: true;');
+                  debug('Model animation reset (fallback): ' + model.id);
+                }, 50);
+              }
             }
+          } catch (e) {
+            debug('Error resetting model animations: ' + e.message);
           }
-          
-          if (model_01_Melissa) {
-            // Get the 3D model's animation component
-            const mixer = model_01_Melissa.components["animation-mixer"];
-            if (mixer && mixer.mixer) {
-              // Access the THREE.js animation mixer directly if possible
-              mixer.mixer.stopAllAction();
-              mixer.mixer.update(0);
-              // Force the component to re-initialize
-              model_01_Melissa.removeAttribute('animation-mixer');
-              model_01_Melissa.setAttribute('animation-mixer', 'loop: repeat; clampWhenFinished: true;');
-              debug('Main model animation reset');
-            } else {
-              // Fallback for when direct mixer access fails
-              model_01_Melissa.removeAttribute('animation-mixer');
-              setTimeout(() => {
-                model_01_Melissa.setAttribute('animation-mixer', 'loop: repeat; clampWhenFinished: true;');
-                debug('Main model animation reset (fallback)');
-              }, 50);
-            }
-          }
-
-          if (model_01_Mirthe) {
-            // Get the 3D model's animation component
-            const mixer = model_01_Mirthe.components["animation-mixer"];
-            if (mixer && mixer.mixer) {
-              // Access the THREE.js animation mixer directly if possible
-              mixer.mixer.stopAllAction();
-              mixer.mixer.update(0);
-              // Force the component to re-initialize
-              model_01_Mirthe.removeAttribute('animation-mixer');
-              model_01_Mirthe.setAttribute('animation-mixer', 'loop: repeat; clampWhenFinished: true;');
-              debug('Main model animation reset');
-            } else {
-              // Fallback for when direct mixer access fails
-              model_01_Mirthe.removeAttribute('animation-mixer');
-              setTimeout(() => {
-                model_01_Mirthe.setAttribute('animation-mixer', 'loop: repeat; clampWhenFinished: true;');
-                debug('Main model animation reset (fallback)');
-              }, 50);
-            }
-          }
-          
-        } catch (e) {
-          debug('Error resetting model animations: ' + e.message);
-        }
+        });
       }
       
-
       // Reset all videos and timers
       function resetVideos() {
         debug('Resetting videos');
@@ -494,10 +460,12 @@
         }
       }
 
-      marker.addEventListener("markerFound", () => {
-        debug('Marker found');
+      // Set up marker 1 events
+      marker1.addEventListener("markerFound", () => {
+        debug('Marker 1 found');
         
-        resetModelAnimations();
+        // Reset marker 1 models
+        resetModelAnimations([backgroundModel1, model_melissa]);
 
         // Reset everything first to handle reconnection properly
         resetVideos();
@@ -507,13 +475,29 @@
 
         // Delay video2 by 2 seconds
         playTimeout2 = setTimeout(playVideo2, 2000);
+      });
 
-        // Delay video2 by 2 seconds
+      marker1.addEventListener("markerLost", () => {
+        debug('Marker 1 lost');
+        resetVideos();
+      });
+      
+      // Set up marker 2 events
+      marker2.addEventListener("markerFound", () => {
+        debug('Marker 2 found');
+        
+        // Reset marker 2 models
+        resetModelAnimations([backgroundModel2, model_mirthe]);
+
+        // Reset everything first to handle reconnection properly
+        resetVideos();
+        
+        // Play video 3 for marker 2
         playTimeout3 = setTimeout(playVideo3, 2000);
       });
 
-      marker.addEventListener("markerLost", () => {
-        debug('Marker lost');
+      marker2.addEventListener("markerLost", () => {
+        debug('Marker 2 lost');
         resetVideos();
       });
       
