@@ -13,7 +13,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: #dce295;
+        background-color: #ff0000;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -172,8 +172,8 @@
       smoothThreshold="2">
       
 
-        <!-- Video container 2 -->
-        <a-entity id="videoContainer2" position="-1.5 0.4 0" rotation="-90 0 0" scale="0 0 0">
+        <!-- Video container 3 -->
+        <a-entity id="videoContainer3" position="-1.5 0.4 0" rotation="-90 0 0" scale="0 0 0">
           <!-- Video 2 -->
           <a-video 
             src="#video3"
@@ -241,6 +241,7 @@
       const video3 = document.querySelector("#video3");
       const videoContainer1 = document.querySelector("#videoContainer1");
       const videoContainer2 = document.querySelector("#videoContainer2");
+      const videoContainer3 = document.querySelector("#videoContainer3");
       const marker = document.querySelector("a-marker");
 
       let playTimeout1, playTimeout2;
@@ -372,19 +373,19 @@
           .then(() => {
             debug('Video 3 playing');
             // Animate scale from 0 to 1 over 1 second
-            animateScale(videoContainer2, 1000);
+            animateScale(videoContainer3, 1000);
             
             // Stop video2 after 40 seconds of playing
             stopTimeout3 = setTimeout(() => {
               video3.pause();
-              videoContainer2.setAttribute('scale', '0 0 0');
+              videoContainer3.setAttribute('scale', '0 0 0');
               video3.currentTime = 0;
             }, 40000);
           })
           .catch(error => {
             debug('Error playing video 3: ' + error.message);
             // Show anyway as fallback
-            animateScale(videoContainer2, 1000);
+            animateScale(videoContainer3, 1000);
           });
       }
 
@@ -478,6 +479,7 @@
         // Reset video containers to minimum scale
         videoContainer1.setAttribute('scale', '0 0 0');
         videoContainer2.setAttribute('scale', '0 0 0');
+        videoContainer3.setAttribute('scale', '0 0 0');
 
         // Reset videos
         try {
