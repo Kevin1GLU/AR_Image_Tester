@@ -61,6 +61,19 @@
     <!-- AR Scene - initially hidden -->
     <a-scene id="arScene" embedded arjs="sourceType: webcam; debugUIEnabled: false;" vr-mode-ui="enabled: false" renderer="logarithmicDepthBuffer: true;" visible="false">
       
+
+          <!-- Loading Screen -->
+    <div id="loadingScreen" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #012733; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; color: white; font-family: Arial, sans-serif;">
+      <div style="font-family: sans-serif; font-weight: bold; font-size: 24px; margin-bottom: 30px; text-align: center; padding: 0 20px; color: #b7bb9d;">Loading camera...</div>
+      <div class="spinner" style="width: 50px; height: 50px; border: 5px solid rgba(183, 187, 157, 0.3); border-radius: 50%; border-top-color: #b7bb9d; animation: spin 1s ease-in-out infinite;"></div>
+    </div>
+
+    <style>
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+    </style>
+
       <a-assets>
         <a-asset-item id="model_background" src="model_background.glb"></a-asset-item>
         <a-asset-item id="model_01" src="model_01.glb"></a-asset-item>
@@ -516,19 +529,40 @@
         // debugInfo.innerHTML += message + '<br>';
       }
       
-      // Start the AR experience when user clicks the start button
+            // Start the AR experience when user clicks the start button
       startButton.addEventListener('click', function() {
         debug('Starting AR experience');
         
         // Hide welcome screen
         welcomeScreen.style.display = 'none';
         
-        // Show AR scene
-        arScene.setAttribute('visible', 'true');
+        // Show loading screen
+        document.getElementById('loadingScreen').style.display = 'flex';
         
         // Initialize videos
         initializeVideos();
+        
+        // Check for camera/AR initialization
+        const arScene = document.querySelector('a-scene');
+        arScene.addEventListener('loaded', function() {
+          debug('AR scene loaded');
+          // Hide loading screen after a short delay to ensure everything is ready
+          setTimeout(function() {
+            document.getElementById('loadingScreen').style.display = 'none';
+            arScene.setAttribute('visible', 'true');
+          }, 1000);
+        });
       });
+
+            // In case the loaded event has already fired
+      if (arScene.hasLoaded) {
+        debug('AR scene already loaded');
+        setTimeout(function() {
+          document.getElementById('loadingScreen').style.display = 'none';
+          arScene.setAttribute('visible', 'true');
+          document.querySelector('a-scene').style.display = 'block';
+        }, 1000);
+      }
       
       // Initialize videos
       function initializeVideos() {
