@@ -13,7 +13,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: #d19292;
+        background-color: #92a6d1;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -123,7 +123,7 @@
       smoothThreshold="2">
       
         <!-- Video container 1 -->
-        <a-entity id="videoContainer1" position="1.3 0.4 0.1" rotation="-90 0 0" scale="0 0 0">
+        <a-entity id="videoContainer1" position="1.9 0.4 0.1" rotation="-90 0 0" scale="0 0 0">
           <!-- Video 1 -->
           <a-video 
             src="#video1" 
@@ -145,7 +145,7 @@
         </a-entity>
 
         <!-- Video container 2 -->
-        <a-entity id="videoContainer2" position="-0.4 0.2 0" rotation="-90 0 0" scale="0 0 0">
+        <a-entity id="videoContainer2" position="-0.8 0.2 0" rotation="-90 0 0" scale="0 0 0">
           <!-- Video 2 -->
           <a-video 
             src="#video2"
@@ -959,16 +959,16 @@ marker1.addEventListener("markerFound", () => {
   resetVideos();
   
   // Delay video1 by 5 seconds
-  playTimeout1 = setTimeout(playVideo1, 5000);
+  playTimeout1 = setTimeout(playVideo1, 8000);
 
   // Delay video2 by 2 seconds
-  playTimeout2 = setTimeout(playVideo2, 3000);
+  playTimeout2 = setTimeout(playVideo2, 6000);
 
   // Delay video2 by 2 seconds
-  playTimeout8 = setTimeout(playVideo8, 4000);
+  playTimeout8 = setTimeout(playVideo8, 7000);
 
   // Delay video2 by 2 seconds
-  playTimeout9 = setTimeout(playVideo9, 7000);
+  playTimeout9 = setTimeout(playVideo9, 10000);
 });
 
 marker1.addEventListener("markerLost", () => {
