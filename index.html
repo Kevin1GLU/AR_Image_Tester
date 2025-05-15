@@ -13,7 +13,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: #227297;
+        background-color: #972291;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -80,6 +80,14 @@
           <source src="clip_melissa.mp4" type="video/mp4" />
         </video>
 
+        <video id="video8" autoplay loop muted playsinline webkit-playsinline crossorigin="anonymous">
+          <source src="clip_melissa_3.mp4" type="video/mp4" />
+        </video>
+        
+        <video id="video9" autoplay loop muted playsinline webkit-playsinline crossorigin="anonymous">
+          <source src="clip_melissa_4.mp4" type="video/mp4" />
+        </video>
+
         <video id="video3" autoplay loop muted playsinline webkit-playsinline crossorigin="anonymous">
           <source src="clip_mirthe_1.mp4" type="video/mp4" />
         </video>
@@ -142,8 +150,8 @@
           <a-video 
             src="#video2"
             id="videoPlane2"
-            width="1.920" 
-            height="1.080"
+            width="1.05"
+            height="0.5726"
             position="0 0 0"
             material="shader: flat; true; depthTest: true; alphaTest: 0.01; opacity: 1; transparent: true;">
           </a-video>
@@ -151,8 +159,8 @@
           <!-- Frame/Border for Video 2 -->
           <a-image 
             src="#frame2" 
-            width="2.035" 
-            height="1.180"
+            width="1.15" 
+            height="0.6226"
             position="0.017 0 0.02" 
             material="transparent: true; alphaTest: 0.4; opacity: 1; depthTest: true;">
           </a-image>
@@ -472,6 +480,8 @@
       const video5 = document.querySelector("#video5");
       const video6 = document.querySelector("#video6");
       const video7 = document.querySelector("#video7");
+      const video8 = document.querySelector("#video8");
+      const video9 = document.querySelector("#video9");
       
       // Get video containers
       const videoContainer1 = document.querySelector("#videoContainer1");
@@ -481,6 +491,8 @@
       const videoContainer5 = document.querySelector("#videoContainer5");
       const videoContainer6 = document.querySelector("#videoContainer6");
       const videoContainer7 = document.querySelector("#videoContainer7");
+      const videoContainer8 = document.querySelector("#videoContainer8");
+      const videoContainer9 = document.querySelector("#videoContainer9");
       
       // Get markers
       const marker1 = document.querySelector("#marker1");
@@ -505,8 +517,8 @@
       const model6 = document.querySelector("#model6");
 
       // Timeouts
-      let playTimeout1, playTimeout2, playTimeout3, playTimeout4, playTimeout5, playTimeout6, playTimeout7;
-      let stopTimeout1, stopTimeout2, stopTimeout3, stopTimeout4, stopTimeout5, stopTimeout6, stopTimeout7;
+      let playTimeout1, playTimeout2, playTimeout3, playTimeout4, playTimeout5, playTimeout6, playTimeout7, playTimeout8, playTimeout9;
+      let stopTimeout1, stopTimeout2, stopTimeout3, stopTimeout4, stopTimeout5, stopTimeout6, stopTimeout7, stopTimeout8, stopTimeout9;
       let videosInitialized = false;
       
       // Debug function - only display in console
@@ -543,6 +555,8 @@
           video5.load();
           video6.load();
           video7.load();
+          video8.load();
+          video9.load();
         } catch (e) {
           debug('Error loading videos: ' + e.message);
         }
@@ -555,7 +569,9 @@
           video4.play().then(() => video4.pause()).catch(e => debug('Video 4 init failed: ' + e.message)),
           video5.play().then(() => video5.pause()).catch(e => debug('Video 5 init failed: ' + e.message)),
           video6.play().then(() => video6.pause()).catch(e => debug('Video 6 init failed: ' + e.message)),
-          video7.play().then(() => video7.pause()).catch(e => debug('Video 7 init failed: ' + e.message))
+          video7.play().then(() => video7.pause()).catch(e => debug('Video 7 init failed: ' + e.message)),
+          video8.play().then(() => video8.pause()).catch(e => debug('Video 6 init failed: ' + e.message)),
+          video9.play().then(() => video9.pause()).catch(e => debug('Video 7 init failed: ' + e.message))
         ]).then(() => {
           videosInitialized = true;
           debug('Videos successfully initialized');
@@ -750,6 +766,52 @@
           });
       }
 
+      function playVideo8() {
+        debug('Attempting to play video 8');
+        
+        video8.play()
+          .then(() => {
+            debug('Video 8 playing');
+            // Animate scale from 0 to 1 over 1 second
+            animateScale(videoContainer8, 1000);
+            
+            // Stop video8 after 40 seconds of playing
+            stopTimeout8 = setTimeout(() => {
+              video8.pause();
+              videoContainer8.setAttribute('scale', '0 0 0');
+              video8.currentTime = 0;
+            }, 40000);
+          })
+          .catch(error => {
+            debug('Error playing video 8: ' + error.message);
+            // Show anyway as fallback
+            animateScale(videoContainer8, 1000);
+          });
+      }
+
+      function playVideo9() {
+        debug('Attempting to play video 9');
+        
+        video9.play()
+          .then(() => {
+            debug('Video 9 playing');
+            // Animate scale from 0 to 1 over 1 second
+            animateScale(videoContainer9, 1000);
+            
+            // Stop video9 after 40 seconds of playing
+            stopTimeout9 = setTimeout(() => {
+              video9.pause();
+              videoContainer9.setAttribute('scale', '0 0 0');
+              video9.currentTime = 0;
+            }, 40000);
+          })
+          .catch(error => {
+            debug('Error playing video 9: ' + error.message);
+            // Show anyway as fallback
+            animateScale(videoContainer9, 1000);
+          });
+      }
+
       // Reset model animations function - updated to handle both markers
       function resetModelAnimations(models) {
         debug('Resetting model animations');
@@ -794,6 +856,8 @@ function resetVideos() {
   clearTimeout(playTimeout5);
   clearTimeout(playTimeout6);
   clearTimeout(playTimeout7);
+  clearTimeout(playTimeout8);
+  clearTimeout(playTimeout9);
   clearTimeout(stopTimeout1);
   clearTimeout(stopTimeout2);
   clearTimeout(stopTimeout3);
@@ -801,6 +865,8 @@ function resetVideos() {
   clearTimeout(stopTimeout5);
   clearTimeout(stopTimeout6);
   clearTimeout(stopTimeout7);
+  clearTimeout(stopTimeout8);
+  clearTimeout(stopTimeout9);
 
   // Reset video containers to minimum scale
   videoContainer1.setAttribute('scale', '0 0 0');
@@ -810,6 +876,8 @@ function resetVideos() {
   videoContainer5.setAttribute('scale', '0 0 0');
   videoContainer6.setAttribute('scale', '0 0 0');
   videoContainer7.setAttribute('scale', '0 0 0');
+  videoContainer8.setAttribute('scale', '0 0 0');
+  videoContainer9.setAttribute('scale', '0 0 0');
 
   // Reset videos
   try {
@@ -820,6 +888,8 @@ function resetVideos() {
     video5.pause();
     video6.pause();
     video7.pause();
+    video8.pause();
+    video9.pause();
     video1.currentTime = 0;
     video2.currentTime = 0;
     video3.currentTime = 0;
@@ -827,6 +897,8 @@ function resetVideos() {
     video5.currentTime = 0;
     video6.currentTime = 0;
     video7.currentTime = 0;
+    video8.currentTime = 0;
+    video9.currentTime = 0;
   } catch (e) {
     debug('Error in reset: ' + e.message);
   }
@@ -846,7 +918,13 @@ marker1.addEventListener("markerFound", () => {
   playTimeout1 = setTimeout(playVideo1, 5000);
 
   // Delay video2 by 2 seconds
-  playTimeout2 = setTimeout(playVideo2, 2000);
+  playTimeout2 = setTimeout(playVideo2, 3000);
+
+  // Delay video2 by 2 seconds
+  playTimeout8 = setTimeout(playVideo8, 4000);
+
+  // Delay video2 by 2 seconds
+  playTimeout9 = setTimeout(playVideo9, 7000);
 });
 
 marker1.addEventListener("markerLost", () => {
