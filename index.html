@@ -13,7 +13,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: #b36914;
+        background-color: #012733;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -141,11 +141,15 @@
 
 
         <video id="video6" autoplay loop muted playsinline webkit-playsinline crossorigin="anonymous">
-          <source src="clip_murat.mp4" type="video/mp4" />
+          <source src="murat1" type="video/mp4" />
         </video>
 
         <video id="video7" autoplay loop muted playsinline webkit-playsinline crossorigin="anonymous">
-          <source src="clip_appie.mp4" type="video/mp4" />
+          <source src="murat2.mp4" type="video/mp4" />
+        </video>
+
+        <video id="video19" autoplay loop muted playsinline webkit-playsinline crossorigin="anonymous">
+          <source src="murat3.mp4" type="video/mp4" />
         </video>
 
         <!-- Frame images for video borders -->
@@ -632,7 +636,7 @@
         </a-entity>
       </a-marker>
       
-      <!-- Marker 5 --------------------------------------------------------------------------------------------------------------------------->
+      <!-- Marker 5 Murat --------------------------------------------------------------------------------------------------------------------------->
       <a-marker id="marker5" type="pattern" url="Marker5.patt"
       
       smooth="true" 
@@ -640,24 +644,68 @@
       smoothTolerance="0.01" 
       smoothThreshold="2">
       
-        <!-- Video container 6 -->
-        <a-entity id="videoContainer6" position="0 0.2 0" rotation="-90 0 0" scale="0 0 0">
-          <!-- Video 6 -->
+        <!-- Video container 5 -->
+        <a-entity id="videoContainer6" position="1.7 0.4 -0.3" rotation="-90 0 0" scale="0 0 0">
+          <!-- Video 1 -->
           <a-video 
-            src="#video6"
+            src="#video6" 
             id="videoPlane6"
-            width="1.920" 
-            height="1.080"
+            width="1.155"
+            height="0.62986"
+            position="0 0 0"
+            material="shader: flat; depthTest: true; alphaTest: 0.01; opacity: 1; transparent: true;">
+          </a-video>
+          
+          <!-- Frame/Border for Video 1 -->
+          <a-image 
+            src="#frame1" 
+            width="1.265" 
+            height="0.68486"
+            position="0 0 0.02" 
+            material="transparent: true; alphaTest: 0.4; opacity: 1; depthTest: true;">
+          </a-image>
+        </a-entity>
+
+        <!-- Video container 16 -->
+        <a-entity id="videoContainer7" position="0.2 0.2 -0.7" rotation="-90 0 0" scale="0 0 0">
+          <!-- Video 2 -->
+          <a-video 
+            src="#video7"
+            id="videoPlane7"
+            width="1.155"
+            height="0.62986"
             position="0 0 0"
             material="shader: flat; true; depthTest: true; alphaTest: 0.01; opacity: 1; transparent: true;">
           </a-video>
           
-          <!-- Frame/Border for Video 6 -->
+          <!-- Frame/Border for Video 2 -->
           <a-image 
             src="#frame2" 
-            width="2.035" 
-            height="1.180"
-            position="0.017 0 0.02" 
+            width="1.265" 
+            height="0.68486"
+            position="0 0 0.02" 
+            material="transparent: true; alphaTest: 0.4; opacity: 1; depthTest: true;">
+          </a-image>
+        </a-entity>
+
+        <!-- Video container 17 -->
+        <a-entity id="videoContainer19" position="-1.2 0.2 0.2" rotation="-90 0 0" scale="0 0 0">
+          <!-- Video 8 -->
+          <a-video 
+            src="#video19"
+            id="videoPlane19"
+            width="1.155"
+            height="0.62986"
+            position="0 0 0"
+            material="shader: flat; true; depthTest: true; alphaTest: 0.01; opacity: 1; transparent: true;">
+          </a-video>
+          
+          <!-- Frame/Border for Video 8 -->
+          <a-image 
+            src="#frame2" 
+            width="1.265" 
+            height="0.68486"
+            position="0 0 0.02" 
             material="transparent: true; alphaTest: 0.4; opacity: 1; depthTest: true;">
           </a-image>
         </a-entity>
@@ -692,28 +740,6 @@
       smoothCount="10" 
       smoothTolerance="0.01" 
       smoothThreshold="2">
-      
-        <!-- Video container 7 -->
-        <a-entity id="videoContainer7" position="0 0.1 0" rotation="-90 0 0" scale="0 0 0">
-          <!-- Video 7 -->
-          <a-video 
-            src="#video7"
-            id="videoPlane7"
-            width="1.920" 
-            height="1.080"
-            position="0 0 0"
-            material="shader: flat; true; depthTest: true; alphaTest: 0.01; opacity: 1; transparent: true;">
-          </a-video>
-          
-          <!-- Frame/Border for Video 7 -->
-          <a-image 
-            src="#frame2" 
-            width="2.035" 
-            height="1.180"
-            position="0.017 0 0.02" 
-            material="transparent: true; alphaTest: 0.4; opacity: 1; depthTest: true;">
-          </a-image>
-        </a-entity>
         
         <!-- Model Background -->
         <a-entity
@@ -772,6 +798,7 @@
       const video16 = document.querySelector("#video16");
       const video17 = document.querySelector("#video17");
       const video18 = document.querySelector("#video18");
+      const video19 = document.querySelector("#video19");
       
       // Get video containers
       const videoContainer1 = document.querySelector("#videoContainer1");
@@ -792,6 +819,7 @@
       const videoContainer16 = document.querySelector("#videoContainer16");
       const videoContainer17 = document.querySelector("#videoContainer17");
       const videoContainer18 = document.querySelector("#videoContainer18");
+      const videoContainer19 = document.querySelector("#videoContainer19");
       
       // Get markers
       const marker1 = document.querySelector("#marker1");
@@ -816,9 +844,9 @@
       const model6 = document.querySelector("#model6");
 
       // Timeouts
-      let playTimeout1, playTimeout2, playTimeout3, playTimeout4, playTimeout5, playTimeout6, playTimeout7, playTimeout8, playTimeout9, playTimeout10, playTimeout11, playTimeout12, playTimeout13, playTimeout14, playTimeout15, playTimeout16, playTimeout17, playTimeout18;
+      let playTimeout1, playTimeout2, playTimeout3, playTimeout4, playTimeout5, playTimeout6, playTimeout7, playTimeout8, playTimeout9, playTimeout10, playTimeout11, playTimeout12, playTimeout13, playTimeout14, playTimeout15, playTimeout16, playTimeout17, playTimeout18, playTimeout19;
 
-      let stopTimeout1, stopTimeout2, stopTimeout3, stopTimeout4, stopTimeout5, stopTimeout6, stopTimeout7, stopTimeout8, stopTimeout9, stopTimeout10, stopTimeout11, stopTimeout12, stopTimeout13, stopTimeout14, stopTimeout15, stopTimeout16, stopTimeout17, stopTimeout18;
+      let stopTimeout1, stopTimeout2, stopTimeout3, stopTimeout4, stopTimeout5, stopTimeout6, stopTimeout7, stopTimeout8, stopTimeout9, stopTimeout10, stopTimeout11, stopTimeout12, stopTimeout13, stopTimeout14, stopTimeout15, stopTimeout16, stopTimeout17, stopTimeout18, stopTimeout19;
 
       let videosInitialized = false;
       
@@ -867,6 +895,7 @@
           video16.load();
           video17.load();
           video18.load();
+          video19.load();
         } catch (e) {
           debug('Error loading videos: ' + e.message);
         }
@@ -1335,6 +1364,29 @@
           });
       }
 
+      function playVideo19() {
+        debug('Attempting to play video 19');
+        
+        video19.play()
+          .then(() => {
+            debug('Video 18 playing');
+            // Animate scale from 0 to 1 over 1 second
+            animateScale(videoContainer19, 1000);
+            
+            // Stop video18 after 40 seconds of playing
+            stopTimeout19 = setTimeout(() => {
+              video19.pause();
+              videoContainer19.setAttribute('scale', '0 0 0');
+              video19.currentTime = 0;
+            }, 40000);
+          })
+          .catch(error => {
+            debug('Error playing video 19: ' + error.message);
+            // Show anyway as fallback
+            animateScale(videoContainer19, 1000);
+          });
+      }
+
       // Reset model animations function - updated to handle both markers
       function resetModelAnimations(models) {
         debug('Resetting model animations');
@@ -1399,6 +1451,7 @@ function resetVideos() {
   clearTimeout(stopTimeout16);
   clearTimeout(stopTimeout17);
   clearTimeout(stopTimeout18);
+  clearTimeout(stopTimeout19);
 
   // Reset video containers to minimum scale
   videoContainer1.setAttribute('scale', '0 0 0');
@@ -1419,6 +1472,7 @@ function resetVideos() {
   videoContainer16.setAttribute('scale', '0 0 0');
   videoContainer17.setAttribute('scale', '0 0 0');
   videoContainer18.setAttribute('scale', '0 0 0');
+  videoContainer19.setAttribute('scale', '0 0 0');
 
 
   // Reset videos
@@ -1441,6 +1495,7 @@ function resetVideos() {
     video16.pause();
     video17.pause();
     video18.pause();
+    video19.pause();
     video1.currentTime = 0;
     video2.currentTime = 0;
     video3.currentTime = 0;
@@ -1459,6 +1514,7 @@ function resetVideos() {
     video16.currentTime = 0;
     video17.currentTime = 0;
     video18.currentTime = 0;
+    video19.currentTime = 0;
   } catch (e) {
     debug('Error in reset: ' + e.message);
   }
@@ -1587,7 +1643,14 @@ marker5.addEventListener("markerFound", () => {
   resetVideos();
   
   // Play video 6 for marker 5
-  playTimeout6 = setTimeout(playVideo6, 2000);
+  playTimeout6 = setTimeout(playVideo6, 15000);
+
+  // Delay video2 by 2 seconds
+  playTimeout7 = setTimeout(playVideo7, 9000);
+
+  // Delay video2 by 2 seconds
+  playTimeout19 = setTimeout(playVideo19, 12000);
+
 });
 
 marker5.addEventListener("markerLost", () => {
@@ -1604,9 +1667,6 @@ marker6.addEventListener("markerFound", () => {
 
   // Reset everything first to handle reconnection properly
   resetVideos();
-  
-  // Play video 7 for marker 6
-  playTimeout7 = setTimeout(playVideo7, 2000);
 });
 
 marker6.addEventListener("markerLost", () => {
