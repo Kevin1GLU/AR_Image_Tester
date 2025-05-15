@@ -13,7 +13,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: #061ef5;
+        background-color: #25700f;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -123,13 +123,22 @@
         </video>
 
 
-        <video id="video4" autoplay loop muted playsinline webkit-playsinline crossorigin="anonymous">
-          <source src="clip_mirthe_2.mp4" type="video/mp4" />
+        <video id="video5" autoplay loop muted playsinline webkit-playsinline crossorigin="anonymous">
+          <source src="myrthe_tide1.mp4" type="video/mp4" />
         </video>
 
-        <video id="video5" autoplay loop muted playsinline webkit-playsinline crossorigin="anonymous">
-          <source src="clip_mirthe_3.mp4" type="video/mp4" />
+        <video id="video16" autoplay loop muted playsinline webkit-playsinline crossorigin="anonymous">
+          <source src="myrthe_tide2.mp4" type="video/mp4" />
         </video>
+
+        <video id="video17" autoplay loop muted playsinline webkit-playsinline crossorigin="anonymous">
+          <source src="myrthe_tide3.mp4" type="video/mp4" />
+        </video>
+
+        <video id="video18" autoplay loop muted playsinline webkit-playsinline crossorigin="anonymous">
+          <source src="myrthe_tide4.mp4" type="video/mp4" />
+        </video>
+
 
         <video id="video6" autoplay loop muted playsinline webkit-playsinline crossorigin="anonymous">
           <source src="clip_murat.mp4" type="video/mp4" />
@@ -265,7 +274,7 @@
       </a-marker>
 
       <!-- Marker 2 Mirthe Janus Lune leaf --------------------------------------------------------------------------------------------------------------------------->
-      <a-marker id="marker2" type="pattern" url="Marker2.patt"
+      <a-marker id="marker4" type="pattern" url="Marker2.patt"
       
       smooth="true" 
       smoothCount="10" 
@@ -504,7 +513,7 @@
       </a-marker>
       
       <!-- Marker 4 --------------------------------------------------------------------------------------------------------------------------->
-      <a-marker id="marker4" type="pattern" url="Marker4.patt"
+      <a-marker id="marker2" type="pattern" url="Marker4.patt"
       
       smooth="true" 
       smoothCount="10" 
@@ -512,23 +521,89 @@
       smoothThreshold="2">
       
         <!-- Video container 5 -->
-        <a-entity id="videoContainer5" position="0 0.2 0" rotation="-90 0 0" scale="0 0 0">
-          <!-- Video 5 -->
+        <a-entity id="videoContainer5" position="1.7 0.4 -0.3" rotation="-90 0 0" scale="0 0 0">
+          <!-- Video 1 -->
           <a-video 
-            src="#video5"
+            src="#video5" 
             id="videoPlane5"
-            width="1.920" 
-            height="1.080"
+            width="1.155"
+            height="0.62986"
+            position="0 0 0"
+            material="shader: flat; depthTest: true; alphaTest: 0.01; opacity: 1; transparent: true;">
+          </a-video>
+          
+          <!-- Frame/Border for Video 1 -->
+          <a-image 
+            src="#frame1" 
+            width="1.265" 
+            height="0.68486"
+            position="0 0 0.02" 
+            material="transparent: true; alphaTest: 0.4; opacity: 1; depthTest: true;">
+          </a-image>
+        </a-entity>
+
+        <!-- Video container 16 -->
+        <a-entity id="videoContainer16" position="0.2 0.2 -0.7" rotation="-90 0 0" scale="0 0 0">
+          <!-- Video 2 -->
+          <a-video 
+            src="#video16"
+            id="videoPlane16"
+            width="1.155"
+            height="0.62986"
             position="0 0 0"
             material="shader: flat; true; depthTest: true; alphaTest: 0.01; opacity: 1; transparent: true;">
           </a-video>
           
-          <!-- Frame/Border for Video 5 -->
+          <!-- Frame/Border for Video 2 -->
           <a-image 
             src="#frame2" 
-            width="2.035" 
-            height="1.180"
-            position="0.017 0 0.02" 
+            width="1.265" 
+            height="0.68486"
+            position="0 0 0.02" 
+            material="transparent: true; alphaTest: 0.4; opacity: 1; depthTest: true;">
+          </a-image>
+        </a-entity>
+
+        <!-- Video container 17 -->
+        <a-entity id="videoContainer17" position="-1.2 0.2 0.2" rotation="-90 0 0" scale="0 0 0">
+          <!-- Video 8 -->
+          <a-video 
+            src="#video17"
+            id="videoPlane17"
+            width="1.155"
+            height="0.62986"
+            position="0 0 0"
+            material="shader: flat; true; depthTest: true; alphaTest: 0.01; opacity: 1; transparent: true;">
+          </a-video>
+          
+          <!-- Frame/Border for Video 8 -->
+          <a-image 
+            src="#frame2" 
+            width="1.265" 
+            height="0.68486"
+            position="0 0 0.02" 
+            material="transparent: true; alphaTest: 0.4; opacity: 1; depthTest: true;">
+          </a-image>
+        </a-entity>
+
+        <!-- Video container 12 -->
+        <a-entity id="videoContainer18" position="0.6 0.2 1.3" rotation="-90 0 0" scale="0 0 0">
+          <!-- Video 9 -->
+          <a-video 
+            src="#video18"
+            id="videoPlane18"
+            width="1.155"
+            height="0.62986"
+            position="0 0 0"
+            material="shader: flat; true; depthTest: true; alphaTest: 0.01; opacity: 1; transparent: true;">
+          </a-video>
+          
+          <!-- Frame/Border for Video 9 -->
+          <a-image 
+            src="#frame2" 
+            width="1.265" 
+            height="0.68486"
+            position="0 0 0.02" 
             material="transparent: true; alphaTest: 0.4; opacity: 1; depthTest: true;">
           </a-image>
         </a-entity>
@@ -693,6 +768,9 @@
       const video13 = document.querySelector("#video13");
       const video14 = document.querySelector("#video14");
       const video15 = document.querySelector("#video15");
+      const video16 = document.querySelector("#video16");
+      const video17 = document.querySelector("#video17");
+      const video18 = document.querySelector("#video18");
       
       // Get video containers
       const videoContainer1 = document.querySelector("#videoContainer1");
@@ -710,6 +788,9 @@
       const videoContainer13 = document.querySelector("#videoContainer13");
       const videoContainer14 = document.querySelector("#videoContainer14");
       const videoContainer15 = document.querySelector("#videoContainer15");
+      const videoContainer16 = document.querySelector("#videoContainer16");
+      const videoContainer17 = document.querySelector("#videoContainer17");
+      const videoContainer18 = document.querySelector("#videoContainer18");
       
       // Get markers
       const marker1 = document.querySelector("#marker1");
@@ -734,9 +815,9 @@
       const model6 = document.querySelector("#model6");
 
       // Timeouts
-      let playTimeout1, playTimeout2, playTimeout3, playTimeout4, playTimeout5, playTimeout6, playTimeout7, playTimeout8, playTimeout9, playTimeout10, playTimeout11, playTimeout12, playTimeout13, playTimeout14, playTimeout15;
+      let playTimeout1, playTimeout2, playTimeout3, playTimeout4, playTimeout5, playTimeout6, playTimeout7, playTimeout8, playTimeout9, playTimeout10, playTimeout11, playTimeout12, playTimeout13, playTimeout14, playTimeout15, playTimeout16, playTimeout17, playTimeout18;
 
-      let stopTimeout1, stopTimeout2, stopTimeout3, stopTimeout4, stopTimeout5, stopTimeout6, stopTimeout7, stopTimeout8, stopTimeout9, stopTimeout10, stopTimeout11, stopTimeout12, stopTimeout13, stopTimeout14, stopTimeout15;
+      let stopTimeout1, stopTimeout2, stopTimeout3, stopTimeout4, stopTimeout5, stopTimeout6, stopTimeout7, stopTimeout8, stopTimeout9, stopTimeout10, stopTimeout11, stopTimeout12, stopTimeout13, stopTimeout14, stopTimeout15, stopTimeout16, stopTimeout17, stopTimeout18;
 
       let videosInitialized = false;
       
@@ -1181,6 +1262,75 @@
           });
       }
 
+      function playVideo16() {
+        debug('Attempting to play video 16');
+        
+        video16.play()
+          .then(() => {
+            debug('Video 16 playing');
+            // Animate scale from 0 to 1 over 1 second
+            animateScale(videoContainer16, 1000);
+            
+            // Stop video15 after 40 seconds of playing
+            stopTimeout16 = setTimeout(() => {
+              video16.pause();
+              videoContainer16.setAttribute('scale', '0 0 0');
+              video16.currentTime = 0;
+            }, 40000);
+          })
+          .catch(error => {
+            debug('Error playing video 16: ' + error.message);
+            // Show anyway as fallback
+            animateScale(videoContainer16, 1000);
+          });
+      }
+
+      function playVideo17() {
+        debug('Attempting to play video 17');
+        
+        video17.play()
+          .then(() => {
+            debug('Video 17 playing');
+            // Animate scale from 0 to 1 over 1 second
+            animateScale(videoContainer17, 1000);
+            
+            // Stop video15 after 40 seconds of playing
+            stopTimeout17 = setTimeout(() => {
+              video17.pause();
+              videoContainer17.setAttribute('scale', '0 0 0');
+              video17.currentTime = 0;
+            }, 40000);
+          })
+          .catch(error => {
+            debug('Error playing video 17: ' + error.message);
+            // Show anyway as fallback
+            animateScale(videoContainer17, 1000);
+          });
+      }
+
+      function playVideo18() {
+        debug('Attempting to play video 18');
+        
+        video18.play()
+          .then(() => {
+            debug('Video 18 playing');
+            // Animate scale from 0 to 1 over 1 second
+            animateScale(videoContainer18, 1000);
+            
+            // Stop video18 after 40 seconds of playing
+            stopTimeout18 = setTimeout(() => {
+              video18.pause();
+              videoContainer18.setAttribute('scale', '0 0 0');
+              video18.currentTime = 0;
+            }, 40000);
+          })
+          .catch(error => {
+            debug('Error playing video 18: ' + error.message);
+            // Show anyway as fallback
+            animateScale(videoContainer18, 1000);
+          });
+      }
+
       // Reset model animations function - updated to handle both markers
       function resetModelAnimations(models) {
         debug('Resetting model animations');
@@ -1239,6 +1389,12 @@ function resetVideos() {
   clearTimeout(stopTimeout10);
   clearTimeout(stopTimeout11);
   clearTimeout(stopTimeout12);
+  clearTimeout(stopTimeout13);
+  clearTimeout(stopTimeout14);
+  clearTimeout(stopTimeout15);
+  clearTimeout(stopTimeout16);
+  clearTimeout(stopTimeout17);
+  clearTimeout(stopTimeout18);
 
   // Reset video containers to minimum scale
   videoContainer1.setAttribute('scale', '0 0 0');
@@ -1253,6 +1409,12 @@ function resetVideos() {
   videoContainer10.setAttribute('scale', '0 0 0');
   videoContainer11.setAttribute('scale', '0 0 0');
   videoContainer12.setAttribute('scale', '0 0 0');
+  videoContainer13.setAttribute('scale', '0 0 0');
+  videoContainer14.setAttribute('scale', '0 0 0');
+  videoContainer15.setAttribute('scale', '0 0 0');
+  videoContainer16.setAttribute('scale', '0 0 0');
+  videoContainer17.setAttribute('scale', '0 0 0');
+  videoContainer18.setAttribute('scale', '0 0 0');
 
 
   // Reset videos
@@ -1269,6 +1431,12 @@ function resetVideos() {
     video10.pause();
     video11.pause();
     video12.pause();
+    video13.pause();
+    video14.pause();
+    video15.pause();
+    video16.pause();
+    video17.pause();
+    video18.pause();
     video1.currentTime = 0;
     video2.currentTime = 0;
     video3.currentTime = 0;
@@ -1281,6 +1449,12 @@ function resetVideos() {
     video10.currentTime = 0;
     video11.currentTime = 0;
     video12.currentTime = 0;
+    video13.currentTime = 0;
+    video14.currentTime = 0;
+    video15.currentTime = 0;
+    video16.currentTime = 0;
+    video17.currentTime = 0;
+    video18.currentTime = 0;
   } catch (e) {
     debug('Error in reset: ' + e.message);
   }
@@ -1381,8 +1555,16 @@ marker4.addEventListener("markerFound", () => {
   // Reset everything first to handle reconnection properly
   resetVideos();
   
-  // Play video 5 for marker 4
-  playTimeout5 = setTimeout(playVideo5, 2000);
+  playTimeout5 = setTimeout(playVideo5, 15000);
+
+  // Delay video2 by 2 seconds
+  playTimeout16 = setTimeout(playVideo16, 9000);
+
+  // Delay video2 by 2 seconds
+  playTimeout17 = setTimeout(playVideo17, 12000);
+
+  // Delay video2 by 2 seconds
+  playTimeout18 = setTimeout(playVideo18, 6000);
 });
 
 marker4.addEventListener("markerLost", () => {
