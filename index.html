@@ -274,7 +274,7 @@
       </a-marker>
 
       <!-- Marker 2 Mirthe Janus Lune leaf --------------------------------------------------------------------------------------------------------------------------->
-      <a-marker id="marker4" type="pattern" url="Marker2.patt"
+      <a-marker id="marker4" type="pattern" url="Marker4.patt"
       
       smooth="true" 
       smoothCount="10" 
@@ -512,8 +512,8 @@
         </a-entity>
       </a-marker>
       
-      <!-- Marker 4 --------------------------------------------------------------------------------------------------------------------------->
-      <a-marker id="marker2" type="pattern" url="Marker4.patt"
+      <!-- Marker 4 Tide --------------------------------------------------------------------------------------------------------------------------->
+      <a-marker id="marker2" type="pattern" url="Marker2.patt"
       
       smooth="true" 
       smoothCount="10" 
@@ -863,6 +863,9 @@
           video13.load();
           video14.load();
           video15.load();
+          video16.load();
+          video17.load();
+          video18.load();
         } catch (e) {
           debug('Error loading videos: ' + e.message);
         }
@@ -1493,7 +1496,7 @@ marker2.addEventListener("markerFound", () => {
   debug('Marker 2 found');
   
   // Reset marker 2 models
-  resetModelAnimations([backgroundModel2, model_mirthe]);
+  resetModelAnimations([backgroundModel4, model4]);
 
   // Reset everything first to handle reconnection properly
   resetVideos();
@@ -1550,7 +1553,7 @@ marker4.addEventListener("markerFound", () => {
   debug('Marker 4 found');
   
   // Reset marker 4 models
-  resetModelAnimations([backgroundModel4, model4]);
+  resetModelAnimations([backgroundModel2, model_mirthe]);
 
   // Reset everything first to handle reconnection properly
   resetVideos();
