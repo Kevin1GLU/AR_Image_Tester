@@ -964,7 +964,7 @@
               video1.pause();
               videoContainer1.setAttribute('scale', '0 0 0');
               video1.currentTime = 0;
-            }, 25000);
+            }, 40000);
           })
           .catch(error => {
             debug('Error playing video 1: ' + error.message);
@@ -1033,6 +1033,8 @@
               video4.pause();
               videoContainer4.setAttribute('scale', '0 0 0');
               video4.currentTime = 0;
+
+              window.location.href = 'https://depaalparket.nl/';
             }, 40000);
           })
           .catch(error => {
